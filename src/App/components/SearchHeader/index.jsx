@@ -45,9 +45,9 @@ class SearchHeader extends React.Component {
     if (!type) return;
 
     const { query } = this.props.search;
-    this.props.history.replace(`/search/${type}/${query || ' '}`);
-
     this.props.updateSearchType({ type });
+
+    this.props.history.replace(`/search/${type}/${query || ' '}`);
 
     this.props.onResult(type, query || ' ');
   }
@@ -94,9 +94,9 @@ class SearchHeader extends React.Component {
 
     if (!type) return;
 
-    this.props.history.replace(`/search/${type}/${query || ' '}`);
-
     this.props.updateSearchQuery({ query });
+
+    this.props.history.replace(`/search/${type}/${query || ' '}`);
 
     this.props.onResult(type, query || ' ');
   }
