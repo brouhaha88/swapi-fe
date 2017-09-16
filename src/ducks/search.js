@@ -1,4 +1,4 @@
-import store from '../config/store';
+import { store } from '../config/redux';
 
 const initialState = {
   type: '',
@@ -18,6 +18,22 @@ export function getSearchQuery() {
 
 export function getSearchType() {
   return getSearch().type;
+}
+
+const UPDATE_SEARCH_TYPE = 'swapi/search/UPDATE_SEARCH_TYPE';
+export function updateSearchType(payload) {
+  return {
+    payload,
+    type: UPDATE_SEARCH_TYPE,
+  };
+}
+
+const UPDATE_SEARCH_QUERY = 'swapi/search/UPDATE_SEARCH_QUERY';
+export function updateSearchQuery(payload) {
+  return {
+    payload,
+    type: UPDATE_SEARCH_QUERY,
+  };
 }
 
 const FETCH_SWAPI_TYPES_STARTED = 'swapi/search/FETCH_SWAPI_TYPES_STARTED';
@@ -58,22 +74,6 @@ export function fetchSwapiTypes(payload) {
         dispatch(fetchedSwapiTypesSuccess({ types }));
       })
       .catch(error => dispatch(fetchedSwapiTypesFailed({ error: error.message })));
-  };
-}
-
-const UPDATE_SEARCH_TYPE = 'swapi/search/UPDATE_SEARCH_TYPE';
-export function updateSearchType(payload) {
-  return {
-    payload,
-    type: UPDATE_SEARCH_TYPE,
-  };
-}
-
-const UPDATE_SEARCH_QUERY = 'swapi/search/UPDATE_SEARCH_QUERY';
-export function updateSearchQuery(payload) {
-  return {
-    payload,
-    type: UPDATE_SEARCH_QUERY,
   };
 }
 

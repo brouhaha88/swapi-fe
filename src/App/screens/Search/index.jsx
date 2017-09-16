@@ -14,7 +14,7 @@ import Headline from '../../../common/components/Headline';
 import ListPlaceholder from '../../../common/components/ListPlaceholder';
 
 class Search extends React.Component {
-  componentDidMount() {
+  componentWillMount() {
     this.props.searchSwapi();
   }
 
@@ -88,9 +88,22 @@ class Search extends React.Component {
 }
 
 Search.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.object,
+  search: PropTypes.shape({
+    type: PropTypes.string,
+    query: PropTypes.string,
+    types: PropTypes.arrayOf(PropTypes.string),
+    fetching: PropTypes.bool,
+    error: PropTypes.string,
   }).isRequired,
+  searchResults: PropTypes.shape({
+    fetching: PropTypes.bool,
+    error: PropTypes.string,
+    count: PropTypes.number,
+    next: PropTypes.string,
+    previous: PropTypes.string,
+    results: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
+  searchSwapi: PropTypes.func.isRequired,
 };
 
 function mapStateToProps({ searchResults, search }) {

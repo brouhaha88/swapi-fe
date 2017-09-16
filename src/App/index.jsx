@@ -1,8 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import { Route, Switch } from 'react-router';
+import { ConnectedRouter } from 'react-router-redux';
 
-import store from '../config/store';
+import { store, history } from '../config/redux';
 
 import AppContainer from '../common/components/AppContainer';
 import Article from '../common/components/Article';
@@ -24,7 +25,7 @@ class App extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        <BrowserRouter>
+        <ConnectedRouter history={history}>
           <AppContainer>
             <Article>
               <SearchHeader />
@@ -42,7 +43,7 @@ class App extends React.Component {
               <Sitemap />
             </Article>
           </AppContainer>
-        </BrowserRouter>
+        </ConnectedRouter>
       </Provider>
     );
   }

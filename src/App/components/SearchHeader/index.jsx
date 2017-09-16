@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router';
+import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
 import {
@@ -47,7 +48,7 @@ class SearchHeader extends React.Component {
     const { query } = this.props.search;
     this.props.updateSearchType({ type });
 
-    this.props.history.replace(`/search/${type}/${query || ' '}`);
+    this.props.push(`/search/${type}/${query || ' '}`);
 
     this.props.onResult(type, query || ' ');
   }
@@ -96,9 +97,13 @@ class SearchHeader extends React.Component {
 
     this.props.updateSearchQuery({ query });
 
-    this.props.history.replace(`/search/${type}/${query || ' '}`);
+    this.props.push(`/search/${type}/${query || ' '}`);
 
     this.props.onResult(type, query || ' ');
+  }
+
+  componentWillUmount() {
+    window.clearTimeout(this.private.throttleTimeout);
   }
 
   render() {
@@ -120,9 +125,17 @@ class SearchHeader extends React.Component {
 }
 
 SearchHeader.propTypes = {
-  history: React.PropTypes.shape({
-    replace: React.PropTypes.func.isRequired,
+  search: PropTypes.shape({
+    type: PropTypes.string,
+    query: PropTypes.string,
+    types: PropTypes.arrayOf(PropTypes.string),
+    fetching: PropTypes.bool,
+    error: PropTypes.string,
   }).isRequired,
+  push: PropTypes.func.isRequired,
+  fetchSwapiTypes: PropTypes.func.isRequired,
+  updateSearchType: PropTypes.func.isRequired,
+  updateSearchQuery: PropTypes.func.isRequired,
   onResult: PropTypes.func,
 };
 
@@ -138,10 +151,11 @@ function mapStateToProps({ search }) {
 
 function mapDispatchToProps(dispatch) {
   return {
+    push: payload => dispatch(push(payload)),
     fetchSwapiTypes: payload => dispatch(fetchSwapiTypes(payload)),
     updateSearchType: payload => dispatch(updateSearchType(payload)),
     updateSearchQuery: payload => dispatch(updateSearchQuery(payload)),
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(SearchHeader));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SearchHeader));
