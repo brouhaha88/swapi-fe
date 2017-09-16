@@ -1,5 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Provider } from 'react-redux';
+
+import store from '../config/store';
 
 import AppContainer from '../common/components/AppContainer';
 import Article from '../common/components/Article';
@@ -20,25 +23,27 @@ import Error from '../common/screens/Error';
 class App extends React.Component {
   render() {
     return (
-      <BrowserRouter>
-        <AppContainer>
-          <Article>
-            <SearchHeader />
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route strict path="/search/:type/:query" component={Search} />
-              <Route path="/films" component={Films} />
-              <Route path="/people" component={People} />
-              <Route path="/planets" component={Planets} />
-              <Route path="/species" component={Species} />
-              <Route path="/starships" component={Starships} />
-              <Route path="/vehicles" component={Vehicles} />
-              <Route path="/:errorPage" component={Error} />
-            </Switch>
-            <Sitemap />
-          </Article>
-        </AppContainer>
-      </BrowserRouter>
+      <Provider store={store}>
+        <BrowserRouter>
+          <AppContainer>
+            <Article>
+              <SearchHeader />
+              <Switch>
+                <Route exact path="/" component={Home} />
+                <Route strict path="/search/:type/:query" component={Search} />
+                <Route path="/films" component={Films} />
+                <Route path="/people" component={People} />
+                <Route path="/planets" component={Planets} />
+                <Route path="/species" component={Species} />
+                <Route path="/starships" component={Starships} />
+                <Route path="/vehicles" component={Vehicles} />
+                <Route path="/:errorPage" component={Error} />
+              </Switch>
+              <Sitemap />
+            </Article>
+          </AppContainer>
+        </BrowserRouter>
+      </Provider>
     );
   }
 }
