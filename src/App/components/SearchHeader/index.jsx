@@ -1,18 +1,10 @@
 import React from 'react';
-import { push } from 'react-router-redux';
-import { connect } from 'react-redux';
 import Anchor from 'grommet/components/Anchor';
 import Header from 'grommet/components/Header';
 import Heading from 'grommet/components/Heading';
 import Menu from 'grommet/components/Menu';
 import Search from 'grommet/components/Search';
 import Spinning from 'grommet/components/icons/Spinning';
-
-import {
-  updateSearchType,
-  updateSearchQuery,
-  fetchSwapiTypes,
-} from '../../../ducks/search';
 
 import './index.scss';
 
@@ -29,10 +21,6 @@ class SearchHeader extends React.Component {
     this.onHeaderSearch = this.onHeaderSearch.bind(this);
   }
 
-  componentWillMount() {
-    this.props.fetchSwapiTypes();
-  }
-
   onHeaderSearch(e) {
     window.clearTimeout(this.private.throttleTimeout);
 
@@ -42,22 +30,17 @@ class SearchHeader extends React.Component {
   setCurrentResourceType(type) {
     if (!type) return;
 
-    const { query } = this.props.search;
-    this.props.updateSearchType({ type });
-
-    this.props.push(`/search/${type}/${query || ' '}`);
-
-    this.props.onResult(type, query || ' ');
+    this.props.onTypeUpdate({ type });
   }
 
   getCurrentResourceType() {
-    const { types, type } = this.props.search;
+    const { types, type } = this.props.data;
 
     return type || types[0] || '';
   }
 
   get menu() {
-    const { types, fetching, error } = this.props.search;
+    const { types, fetching, error } = this.props.data;
 
     return (
       <Menu
@@ -111,11 +94,7 @@ class SearchHeader extends React.Component {
 
     if (!type) return;
 
-    this.props.updateSearchQuery({ query });
-
-    this.props.push(`/search/${type}/${query || ' '}`);
-
-    this.props.onResult(type, query || ' ');
+    this.props.onQueryUpdate({ query: query || ' ' });
   }
 
   componentWillUmount() {
@@ -155,23 +134,4 @@ class SearchHeader extends React.Component {
   }
 }
 
-SearchHeader.defaultProps = {
-  onResult() {},
-};
-
-function mapStateToProps({ search }) {
-  return {
-    search,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    push: payload => dispatch(push(payload)),
-    fetchSwapiTypes: payload => dispatch(fetchSwapiTypes(payload)),
-    updateSearchType: payload => dispatch(updateSearchType(payload)),
-    updateSearchQuery: payload => dispatch(updateSearchQuery(payload)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(SearchHeader);
+export default SearchHeader;

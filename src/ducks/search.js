@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 import { store } from '../config';
 
 const initialState = {
@@ -22,17 +24,29 @@ export function getSearchType() {
 
 const UPDATE_SEARCH_TYPE = 'swapi/search/UPDATE_SEARCH_TYPE';
 export function updateSearchType(payload) {
-  return {
-    payload,
-    type: UPDATE_SEARCH_TYPE,
+  return (dispatch) => {
+    dispatch({
+      payload,
+      type: UPDATE_SEARCH_TYPE,
+    });
+
+    const query = getSearchQuery();
+
+    if (query) {
+      dispatch(push(`/search/${payload.type}/${getSearchQuery()}`));
+    }
   };
 }
 
 const UPDATE_SEARCH_QUERY = 'swapi/search/UPDATE_SEARCH_QUERY';
 export function updateSearchQuery(payload) {
-  return {
-    payload,
-    type: UPDATE_SEARCH_QUERY,
+  return (dispatch) => {
+    dispatch({
+      payload,
+      type: UPDATE_SEARCH_QUERY,
+    });
+
+    dispatch(push(`/search/${getSearchType()}/${payload.query}`));
   };
 }
 
