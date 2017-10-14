@@ -1,5 +1,4 @@
 import React from 'react';
-import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 import Anchor from 'grommet/components/Anchor';
@@ -175,4 +174,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(SearchHeader));
+export default connect(mapStateToProps, mapDispatchToProps)(SearchHeader);

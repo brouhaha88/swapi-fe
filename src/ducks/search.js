@@ -1,4 +1,4 @@
-import { store } from '../config/redux';
+import { store } from '../config';
 
 const initialState = {
   type: '',
