@@ -2,11 +2,12 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { Route, Switch } from 'react-router';
 import { ConnectedRouter } from 'react-router-redux';
+import AppContainer from 'grommet/components/App';
+import Article from 'grommet/components/Article';
+
+import 'grommet/scss/vanilla/index.scss';
 
 import { store, history } from '../config/redux';
-
-import AppContainer from '../common/components/AppContainer';
-import Article from '../common/components/Article';
 
 import SearchHeader from './components/SearchHeader';
 import Sitemap from './components/Sitemap';
@@ -26,7 +27,7 @@ class App extends React.Component {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <AppContainer>
+          <AppContainer centered={false}>
             <Article>
               <SearchHeader />
               <Switch>

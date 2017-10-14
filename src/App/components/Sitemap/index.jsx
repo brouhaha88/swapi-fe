@@ -1,11 +1,10 @@
 import React from 'react';
-
-import Footer from '../../../common/components/Footer';
-import Anchor from '../../../common/components/Anchor';
-import Title from '../../../common/components/Title';
-import Box from '../../../common/components/Box';
-import Menu from '../../../common/components/Menu';
-import Paragraph from '../../../common/components/Paragraph';
+import Anchor from 'grommet/components/Anchor';
+import Box from 'grommet/components/Box';
+import Footer from 'grommet/components/Footer';
+import Menu from 'grommet/components/Menu';
+import Paragraph from 'grommet/components/Paragraph';
+import Title from 'grommet/components/Title';
 
 import './index.scss';
 
@@ -39,25 +38,53 @@ class Sitemap extends React.Component {
             size="small"
             dropAlign={{ right: 'right' }}
           >
-            <Anchor path={{ path: '/', index: true }}>
+            <Anchor
+              reverse
+              align="end"
+              path={{ path: '/', index: true }}
+            >
               Home
             </Anchor>
-            <Anchor path={{ path: '/films', index: true }}>
+            <Anchor
+              reverse
+              align="end"
+              path={{ path: '/films', index: true }}
+            >
               Films
             </Anchor>
-            <Anchor path={{ path: '/people', index: true }}>
+            <Anchor
+              reverse
+              align="end"
+              path={{ path: '/people', index: true }}
+            >
               People
             </Anchor>
-            <Anchor path={{ path: '/planets', index: true }}>
+            <Anchor
+              reverse
+              align="end"
+              path={{ path: '/planets', index: true }}
+            >
               Planets
             </Anchor>
-            <Anchor path={{ path: '/species', index: true }}>
+            <Anchor
+              reverse
+              align="end"
+              path={{ path: '/species', index: true }}
+            >
               Species
             </Anchor>
-            <Anchor path={{ path: '/starships', index: true }}>
+            <Anchor
+              reverse
+              align="end"
+              path={{ path: '/starships', index: true }}
+            >
               Starships
             </Anchor>
-            <Anchor path={{ path: '/vehicles', index: true }}>
+            <Anchor
+              reverse
+              align="end"
+              path={{ path: '/vehicles', index: true }}
+            >
               Vehicles
             </Anchor>
           </Menu>

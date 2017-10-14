@@ -1,9 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-import Section from '../../components/Section';
-import Headline from '../../components/Headline';
-import Box from '../../components/Box';
+import Box from 'grommet/components/Box';
+import Headline from 'grommet/components/Headline';
+import Section from 'grommet/components/Section';
 
 class Error extends React.Component {
   render() {
@@ -18,11 +16,5 @@ class Error extends React.Component {
     );
   }
 }
-
-Error.propTypes = {
-  location: PropTypes.shape({
-    pathname: PropTypes.string,
-  }).isRequired,
-};
 
 export default Error;

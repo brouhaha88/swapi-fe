@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 class TypeAhead extends React.Component {
   constructor(...args) {
@@ -48,7 +47,7 @@ class TypeAhead extends React.Component {
 
   get children() {
     const {
-      children, // eslint-disable-line react/prop-types
+      children,
       skipAnimation,
       delayAfter,
     } = this.props;
@@ -162,15 +161,6 @@ class TypeAhead extends React.Component {
     );
   }
 }
-
-TypeAhead.propTypes = {
-  sentence: PropTypes.string.isRequired,
-  tag: PropTypes.string,
-  startImmediately: PropTypes.bool,
-  skipAnimation: PropTypes.bool,
-  delayAfter: PropTypes.number,
-  onFinish: PropTypes.func,
-};
 
 TypeAhead.defaultProps = {
   tag: 'span',

@@ -1,21 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
+import Anchor from 'grommet/components/Anchor';
+import Header from 'grommet/components/Header';
+import Heading from 'grommet/components/Heading';
+import Menu from 'grommet/components/Menu';
+import Search from 'grommet/components/Search';
+import Spinning from 'grommet/components/icons/Spinning';
 
 import {
   updateSearchType,
   updateSearchQuery,
   fetchSwapiTypes,
 } from '../../../ducks/search';
-
-import Header from '../../../common/components/Header';
-import Heading from '../../../common/components/Heading';
-import Search from '../../../common/components/Search';
-import Menu from '../../../common/components/Menu';
-import Anchor from '../../../common/components/Anchor';
-import Spinning from '../../../common/components/Spinning';
 
 import './index.scss';
 
@@ -63,10 +61,22 @@ class SearchHeader extends React.Component {
     const { types, fetching, error } = this.props.search;
 
     return (
-      <Menu icon={fetching ? <Spinning /> : null}>
+      <Menu
+        inline={false}
+        dropAlign={{
+          right: 'right',
+          top: 'top',
+        }}
+        icon={fetching ? <Spinning /> : null}
+      >
         {
           error ?
-            <Heading tag="h4">
+            <Heading
+              uppercase
+              margin="none"
+              strong
+              tag="h4"
+            >
               {error}
             </Heading> :
             types.map(
@@ -74,12 +84,19 @@ class SearchHeader extends React.Component {
                 <Anchor
                   key={type}
                   className="swapi-menu-item"
+                  align="end"
+                  reverse
                   label={type}
                   onClick={
                     () => this.setCurrentResourceType(type)
                   }
                 >
-                  <Heading tag="h4">
+                  <Heading
+                    uppercase
+                    margin="none"
+                    strong
+                    tag="h4"
+                  >
                     {type}
                   </Heading>
                 </Anchor>
@@ -109,12 +126,27 @@ class SearchHeader extends React.Component {
   render() {
     return (
       <Header className="swapi-search-header">
-        <Anchor path={{ path: '/', index: true }}>
-          <Heading>
+        <Anchor
+          align="end"
+          reverse
+          path={{ path: '/', index: true }}
+        >
+          <Heading
+            tag="h2"
+            margin="none"
+            uppercase
+            strong
+          >
             SWAPI
           </Heading>
         </Anchor>
         <Search
+          fill
+          inline
+          dropAlign={{
+            right: 'right',
+            top: 'top',
+          }}
           placeHolder={`Embrace the world of Star Wars! Search for ${this.getCurrentResourceType()}...`}
           onDOMChange={this.onHeaderSearch}
         />
@@ -123,21 +155,6 @@ class SearchHeader extends React.Component {
     );
   }
 }
-
-SearchHeader.propTypes = {
-  search: PropTypes.shape({
-    type: PropTypes.string,
-    query: PropTypes.string,
-    types: PropTypes.arrayOf(PropTypes.string),
-    fetching: PropTypes.bool,
-    error: PropTypes.string,
-  }).isRequired,
-  push: PropTypes.func.isRequired,
-  fetchSwapiTypes: PropTypes.func.isRequired,
-  updateSearchType: PropTypes.func.isRequired,
-  updateSearchQuery: PropTypes.func.isRequired,
-  onResult: PropTypes.func,
-};
 
 SearchHeader.defaultProps = {
   onResult() {},

@@ -1,17 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import Box from 'grommet/components/Box';
+import Headline from 'grommet/components/Headline';
+import Meter from 'grommet/components/Meter';
+import Section from 'grommet/components/Section';
+import Tiles from 'grommet/components/Tiles';
+import Value from 'grommet/components/Value';
+import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
 
 import { searchSwapi } from '../../../ducks/searchResults';
 
 import SearchPane from './components/SearchPane';
-import Section from '../../../common/components/Section';
-import Tiles from '../../../common/components/Tiles';
-import Meter from '../../../common/components/Meter';
-import Box from '../../../common/components/Box';
-import Value from '../../../common/components/Value';
-import Headline from '../../../common/components/Headline';
-import ListPlaceholder from '../../../common/components/ListPlaceholder';
 
 class Search extends React.Component {
   componentWillMount() {
@@ -86,25 +85,6 @@ class Search extends React.Component {
     );
   }
 }
-
-Search.propTypes = {
-  search: PropTypes.shape({
-    type: PropTypes.string,
-    query: PropTypes.string,
-    types: PropTypes.arrayOf(PropTypes.string),
-    fetching: PropTypes.bool,
-    error: PropTypes.string,
-  }).isRequired,
-  searchResults: PropTypes.shape({
-    fetching: PropTypes.bool,
-    error: PropTypes.string,
-    count: PropTypes.number,
-    next: PropTypes.string,
-    previous: PropTypes.string,
-    results: PropTypes.arrayOf(PropTypes.object),
-  }).isRequired,
-  searchSwapi: PropTypes.func.isRequired,
-};
 
 function mapStateToProps({ searchResults, search }) {
   return {

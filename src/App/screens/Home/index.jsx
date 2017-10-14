@@ -1,9 +1,9 @@
 import React from 'react';
+import Box from 'grommet/components/Box';
+import Headline from 'grommet/components/Headline';
+import Hero from 'grommet/components/Hero';
+import Image from 'grommet/components/Image';
 
-import Headline from '../../../common/components/Headline';
-import Image from '../../../common/components/Image';
-import Hero from '../../../common/components/Hero';
-import Box from '../../../common/components/Box';
 import TypeAhead from './components/TypeAhead';
 
 import hero from './assets/hero.jpg';

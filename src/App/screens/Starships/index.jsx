@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Section from '../../../common/components/Section';
+import Section from 'grommet/components/Section';
 
 class Starships extends React.Component {
   render() {

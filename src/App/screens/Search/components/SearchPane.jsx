@@ -1,8 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-import Tile from '../../../../common/components/Tile';
-import Card from '../../../../common/components/Card';
+import Card from 'grommet/components/Card';
+import Tile from 'grommet/components/Tile';
 
 import sw from './assets/sw.jpg';
 
@@ -20,12 +18,5 @@ class SearchTile extends React.Component {
     );
   }
 }
-
-SearchTile.propTypes = {
-  data: PropTypes.shape({
-    name: PropTypes.string,
-  }).isRequired,
-  type: PropTypes.string.isRequired,
-};
 
 export default SearchTile;
