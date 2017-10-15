@@ -1,11 +1,12 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
-import createHistory from 'history/createBrowserHistory';
+import createBrowserHistory from 'history/createBrowserHistory';
+import createMemoryHistory from 'history/createMemoryHistory';
 import thunk from 'redux-thunk';
 
 import reducers from '../ducks';
 
-const history = createHistory();
+const history = process.env.SERVER ? createMemoryHistory() : createBrowserHistory();
 const router = routerMiddleware(history);
 
 const store = createStore(
@@ -14,9 +15,13 @@ const store = createStore(
     applyMiddleware(
       thunk,
       router,
-    ),
-    // eslint-disable-next-line no-underscore-dangle
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+    ), (
+      !process.env.SERVER &&
+      // eslint-disable-next-line no-underscore-dangle
+      window.__REDUX_DEVTOOLS_EXTENSION__ &&
+      // eslint-disable-next-line no-underscore-dangle
+      window.__REDUX_DEVTOOLS_EXTENSION__()
+    ) || (() => {}),
   ),
 );
 

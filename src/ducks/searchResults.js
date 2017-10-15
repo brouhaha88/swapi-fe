@@ -1,14 +1,5 @@
 import { getSearchQuery, getSearchType } from './search';
 
-const initialState = {
-  fetching: false,
-  error: '',
-  count: 0,
-  next: null,
-  previous: null,
-  results: [],
-};
-
 const SEARCH_SWAPI_STARTED = 'swapi/searchResults/SEARCH_SWAPI_STARTED';
 function searchSwapiStarted(payload = { fetching: true }) {
   return {
@@ -37,13 +28,21 @@ export function searchSwapi(payload) {
   return (dispatch) => {
     dispatch(searchSwapiStarted(payload));
 
-    return window
-      .fetch(`https://swapi.co/api/${getSearchType()}/?search=${getSearchQuery()}`)
+    return fetch(`https://swapi.co/api/${getSearchType()}/?search=${getSearchQuery()}`)
       .then(res => res.json())
       .then(json => dispatch(searchedSwapiSuccess(json)))
       .catch(error => dispatch(searchedSwapiFailed({ error: error.message })));
   };
 }
+
+const initialState = {
+  fetching: false,
+  error: '',
+  count: 0,
+  next: null,
+  previous: null,
+  results: [],
+};
 
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {

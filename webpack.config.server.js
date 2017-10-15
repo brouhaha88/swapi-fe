@@ -2,11 +2,12 @@ const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require('start-server-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: [
     'webpack/hot/poll?1000',
-    './src/server.js',
+    './src/server.jsx',
   ],
   watch: true,
   target: 'node',
@@ -17,22 +18,51 @@ module.exports = {
   ],
   module: {
     rules: [{
-      test: /\.js?$/,
-      use: [
-        'babel-loader',
-        'eslint-loader',
-      ],
+      test: /\.(js|jsx)$/,
       exclude: /node_modules/,
+      use: [{
+        loader: 'babel-loader',
+      }, {
+        loader: 'eslint-loader',
+      }],
+    }, {
+      test: /\.(css|scss)$/,
+      use: ExtractTextPlugin.extract({
+        fallback: 'style-loader',
+        use: [{
+          loader: 'css-loader',
+        }, {
+          loader: 'sass-loader',
+          options: {
+            includePaths: ['./node_modules'],
+          },
+        }],
+      }),
+    }, {
+      test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
+      use: [{
+        loader: 'file-loader',
+        options: {
+          publicPath: '/',
+        },
+      }],
     }],
   },
   plugins: [
+    new ExtractTextPlugin('client.css'),
     new StartServerPlugin('server.js'),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.DefinePlugin({
+      'process.env.SERVER': 'true',
+    }),
   ],
   output: {
     path: path.resolve(__dirname, 'build'),
     filename: 'server.js',
+  },
+  resolve: {
+    extensions: ['.js', '.json', '.jsx'],
   },
 };

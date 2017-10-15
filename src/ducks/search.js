@@ -2,14 +2,6 @@ import { push } from 'react-router-redux';
 
 import { store } from '../config';
 
-const initialState = {
-  type: '',
-  query: '',
-  types: [],
-  fetching: false,
-  error: '',
-};
-
 export function getSearch() {
   return store.getState().search;
 }
@@ -78,8 +70,7 @@ export function fetchSwapiTypes(payload) {
   return (dispatch) => {
     dispatch(fetchSwapiTypesStarted(payload));
 
-    return window
-      .fetch('https://swapi.co/api/')
+    return fetch('https://swapi.co/api/')
       .then(res => res.json())
       .then((json) => {
         const types = Object.keys(json);
@@ -90,6 +81,14 @@ export function fetchSwapiTypes(payload) {
       .catch(error => dispatch(fetchedSwapiTypesFailed({ error: error.message })));
   };
 }
+
+const initialState = {
+  type: '',
+  query: '',
+  types: [],
+  fetching: false,
+  error: '',
+};
 
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {

@@ -6,7 +6,6 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: [
     'babel-polyfill',
-    'whatwg-fetch',
     'react-hot-loader/patch',
     './src/client.jsx',
   ],
@@ -14,22 +13,24 @@ module.exports = {
   module: {
     rules: [{
       test: /\.(js|jsx)$/,
-      use: [
-        'babel-loader',
-        'eslint-loader',
-      ],
+      use: [{
+        loader: 'babel-loader',
+      }, {
+        loader: 'eslint-loader',
+      }],
       exclude: /node_modules/,
     }, {
       test: /\.(css|scss)$/,
-      use: [
-        'style-loader',
-        'css-loader',
-        {
-          loader: 'sass-loader',
-          options: {
-            includePaths: ['./node_modules'],
-          },
+      use: [{
+        loader: 'style-loader',
+      }, {
+        loader: 'css-loader',
+      }, {
+        loader: 'sass-loader',
+        options: {
+          includePaths: ['./node_modules'],
         },
+      },
       ],
     }, {
       test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,

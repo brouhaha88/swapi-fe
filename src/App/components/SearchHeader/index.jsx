@@ -22,9 +22,9 @@ class SearchHeader extends React.Component {
   }
 
   onHeaderSearch(e) {
-    window.clearTimeout(this.private.throttleTimeout);
+    clearTimeout(this.private.throttleTimeout);
 
-    this.private.throttleTimeout = window.setTimeout(() => this.search(e.target.value), DELAY);
+    this.private.throttleTimeout = setTimeout(() => this.search(e.target.value), DELAY);
   }
 
   setCurrentResourceType(type) {
@@ -98,7 +98,7 @@ class SearchHeader extends React.Component {
   }
 
   componentWillUmount() {
-    window.clearTimeout(this.private.throttleTimeout);
+    clearTimeout(this.private.throttleTimeout);
   }
 
   render() {

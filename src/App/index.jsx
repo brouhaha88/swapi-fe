@@ -4,8 +4,6 @@ import { renderRoutes } from 'react-router-config';
 import AppContainer from 'grommet/components/App';
 import Article from 'grommet/components/Article';
 
-import 'grommet/scss/vanilla/index.scss';
-
 import {
   updateSearchType,
   updateSearchQuery,
@@ -15,8 +13,10 @@ import {
 import SearchHeader from './components/SearchHeader';
 import Sitemap from './components/Sitemap';
 
+import './index.scss';
+
 class App extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchSwapiTypes();
   }
 

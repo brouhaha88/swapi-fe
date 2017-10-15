@@ -13,7 +13,7 @@ import { searchSwapi } from '../../../ducks/searchResults';
 import SearchPane from './components/SearchPane';
 
 class Search extends React.Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.searchSwapi();
   }
 
