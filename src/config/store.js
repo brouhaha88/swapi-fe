@@ -8,20 +8,18 @@ import reducers from '../ducks';
 
 const history = process.env.SERVER ? createMemoryHistory() : createBrowserHistory();
 const router = routerMiddleware(history);
-
+// eslint-disable-next-line no-underscore-dangle
+const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+  // eslint-disable-next-line no-underscore-dangle
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
+  compose;
 const store = createStore(
   reducers,
-  compose(
+  composeEnhancers(
     applyMiddleware(
       thunk,
       router,
-    ), (
-      !process.env.SERVER &&
-      // eslint-disable-next-line no-underscore-dangle
-      window.__REDUX_DEVTOOLS_EXTENSION__ &&
-      // eslint-disable-next-line no-underscore-dangle
-      window.__REDUX_DEVTOOLS_EXTENSION__()
-    ) || (() => {}),
+    ),
   ),
 );
 

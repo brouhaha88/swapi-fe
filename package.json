@@ -6,7 +6,7 @@
   "main": "webpack.config.client.js",
   "scripts": {
     "start": "rm -rf ./build && webpack --config webpack.config.server.js",
-    "client": "webpack-dev-server --config webpack.config.client.js"
+    "client": "webpack --config webpack.config.client.js"
   },
   "engines": {
     "node": ">=8.2.1",
@@ -52,7 +52,7 @@
     "style-loader": "^0.18.2",
     "webpack": "^3.5.4",
     "webpack-dev-middleware": "^1.12.0",
-    "webpack-dev-server": "^2.7.1",
+    "webpack-hot-middleware": "^2.19.1",
     "webpack-node-externals": "^1.6.0"
   }
 }

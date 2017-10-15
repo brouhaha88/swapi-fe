@@ -1,5 +1,12 @@
 import http from 'http';
 import express from 'express';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import webpack from 'webpack';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import webpackDevMiddleware from 'webpack-dev-middleware';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import webpackHotMiddleware from 'webpack-hot-middleware';
+
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { AppContainer } from 'react-hot-loader';
@@ -8,11 +15,20 @@ import { renderRoutes } from 'react-router-config';
 import { ConnectedRouter } from 'react-router-redux';
 
 import { routes, store, history } from './config';
+import webpackClientConfig from '../webpack.config.client';
 
 function createServer() {
   const app = express();
+  const compiler = webpack(webpackClientConfig);
 
-  app.use(express.static('public'));
+  app.use(express.static('build'));
+
+  app.get('/client.js', webpackDevMiddleware(compiler, {
+    publicPath: webpackClientConfig.output.publicPath,
+  }));
+  app.get('/client.hot-update.js', webpackHotMiddleware(compiler, {
+    path: '/client.hot-update.js',
+  }));
 
   app.get('/*', (req, res) => {
     const application = renderToString(

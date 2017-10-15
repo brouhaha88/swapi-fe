@@ -7,6 +7,7 @@ module.exports = {
   entry: [
     'babel-polyfill',
     'react-hot-loader/patch',
+    'webpack-hot-middleware/client?path=/client.hot-update.js',
     './src/client.jsx',
   ],
   target: 'web',
@@ -51,16 +52,9 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
   ],
-  devServer: {
-    host: 'localhost',
-    port: 3000,
-    publicPath: '/',
-    historyApiFallback: true,
-    hot: true,
-  },
   output: {
     path: path.join(__dirname, './build'),
-    publicPath: '',
+    publicPath: '/',
     filename: 'client.js',
   },
   resolve: {
