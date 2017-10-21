@@ -6,8 +6,8 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: [
     'babel-polyfill',
-    'react-hot-loader/patch',
     'webpack-hot-middleware/client?path=/client.hot-update.js',
+    'react-hot-loader/patch',
     './src/client.jsx',
   ],
   target: 'web',
@@ -38,7 +38,7 @@ module.exports = {
       use: [{
         loader: 'file-loader',
         options: {
-          publicPath: '/',
+          publicPath: '/public/',
         },
       }],
     }],
@@ -54,7 +54,7 @@ module.exports = {
   ],
   output: {
     path: path.join(__dirname, './build'),
-    publicPath: '/',
+    publicPath: '/public/',
     filename: 'client.js',
   },
   resolve: {
