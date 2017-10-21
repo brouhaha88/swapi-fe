@@ -99,4 +99,8 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Search);
+const ConnectedSearch = connect(mapStateToProps, mapDispatchToProps)(Search);
+
+ConnectedSearch.fetchData = (store, payload) => store.dispatch(searchSwapi(payload));
+
+export default ConnectedSearch;

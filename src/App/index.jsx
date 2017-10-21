@@ -51,4 +51,8 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
+
+ConnectedApp.fetchData = (store, payload) => store.dispatch(fetchSwapiTypes(payload));
+
+export default ConnectedApp;
