@@ -6,10 +6,10 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   entry: [
-    // 'webpack/hot/poll?1000',
-    './src/server.jsx',
+    'webpack/hot/poll?1000',
+    './src',
   ],
-  // watch: true,
+  watch: true,
   target: 'node',
   externals: [
     nodeExternals({
@@ -52,7 +52,7 @@ module.exports = {
     new ExtractTextPlugin('client.css'),
     new StartServerPlugin('server.js'),
     new webpack.NamedModulesPlugin(),
-    // new webpack.HotModuleReplacementPlugin(),
+    new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env.SERVER': 'true',

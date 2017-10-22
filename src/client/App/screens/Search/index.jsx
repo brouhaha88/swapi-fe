@@ -8,7 +8,7 @@ import Tiles from 'grommet/components/Tiles';
 import Value from 'grommet/components/Value';
 import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
 
-import { searchSwapi } from '../../../ducks/searchResults';
+import { searchSwapi } from '../../../../ducks/searchResults';
 
 import SearchPane from './components/SearchPane';
 

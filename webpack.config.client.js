@@ -6,9 +6,9 @@ module.exports = {
   devtool: 'inline-source-map',
   entry: [
     'babel-polyfill',
-    'webpack-hot-middleware/client?path=/client.hot-update.js',
+    'webpack-hot-middleware/client',
     'react-hot-loader/patch',
-    './src/client.jsx',
+    './src/client',
   ],
   target: 'web',
   module: {

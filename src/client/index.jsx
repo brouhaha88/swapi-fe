@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 
-import { routes, store, history } from './config';
+import { routes, store, history } from '../config';
 
 function render() {
   ReactDOM.render(
@@ -23,7 +23,7 @@ function render() {
 render();
 
 if (module.hot) {
-  module.hot.accept('./config', () => {
+  module.hot.accept('../config', () => {
     render();
   });
 }

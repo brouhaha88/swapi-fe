@@ -8,7 +8,7 @@ import {
   updateSearchType,
   updateSearchQuery,
   fetchSwapiTypes,
-} from '../ducks/search';
+} from '../../ducks/search';
 
 import SearchHeader from './components/SearchHeader';
 import Sitemap from './components/Sitemap';

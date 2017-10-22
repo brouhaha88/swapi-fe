@@ -1,12 +1,12 @@
-import App from '../App';
-import Search from '../App/screens/Search';
-import Films from '../App/screens/Films';
-import Home from '../App/screens/Home';
-import People from '../App/screens/People';
-import Planets from '../App/screens/Planets';
-import Species from '../App/screens/Species';
-import Starships from '../App/screens/Starships';
-import Vehicles from '../App/screens/Vehicles';
+import App from '../client/App';
+import Search from '../client/App/screens/Search';
+import Films from '../client/App/screens/Films';
+import Home from '../client/App/screens/Home';
+import People from '../client/App/screens/People';
+import Planets from '../client/App/screens/Planets';
+import Species from '../client/App/screens/Species';
+import Starships from '../client/App/screens/Starships';
+import Vehicles from '../client/App/screens/Vehicles';
 import ErrorPage from '../common/screens/Error';
 
 export default [

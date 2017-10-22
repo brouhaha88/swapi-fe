@@ -5,8 +5,7 @@
   "description": "Minimal boilerplate to simplify kick off period of the next project.",
   "main": "webpack.config.client.js",
   "scripts": {
-    "start": "rm -rf ./build && webpack --config webpack.config.server.js",
-    "client": "webpack --config webpack.config.client.js"
+    "start": "rm -rf ./build && webpack --config webpack.config.server.js"
   },
   "engines": {
     "node": ">=8.2.1",

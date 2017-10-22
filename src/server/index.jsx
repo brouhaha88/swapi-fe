@@ -1,11 +1,4 @@
-import http from 'http';
 import express from 'express';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import webpack from 'webpack';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import webpackDevMiddleware from 'webpack-dev-middleware';
-// eslint-disable-next-line import/no-extraneous-dependencies
-import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import React from 'react';
 import { renderToString } from 'react-dom/server';
@@ -14,26 +7,11 @@ import { Provider } from 'react-redux';
 import { renderRoutes, matchRoutes } from 'react-router-config';
 import { ConnectedRouter } from 'react-router-redux';
 
-import { routes, store, history } from './config';
-import webpackClientConfig from '../webpack.config.client';
+import { routes, store, history } from '../config';
 
-const app = express();
-const compiler = webpack(webpackClientConfig);
+const router = express.Router();
 
-app.use('/public/', express.static('build'));
-
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: webpackClientConfig.output.publicPath,
-  stats: {
-    colors: true,
-  },
-}));
-app.use(webpackHotMiddleware(compiler, {
-  path: '/client.hot-update.js',
-  dynamicPublicPath: true,
-}));
-
-app.get('/*', (req, res) => {
+router.get('*', (req, res) => {
   const components = matchRoutes(routes, req.path);
   const promises = [];
 
@@ -72,6 +50,4 @@ app.get('/*', (req, res) => {
   });
 });
 
-const server = http.createServer(app);
-
-server.listen(3000);
+export default router;
