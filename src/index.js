@@ -1,10 +1,8 @@
 import http from 'http';
 import express from 'express';
-// eslint-disable-next-line import/no-extraneous-dependencies
+// TODO: Don't forget to manage it in production!!!
 import webpack from 'webpack';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import webpackDevMiddleware from 'webpack-dev-middleware';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import webpackHotMiddleware from 'webpack-hot-middleware';
 
 import webpackClientConfig from '../webpack.config.client';
