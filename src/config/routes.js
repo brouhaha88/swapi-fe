@@ -11,36 +11,35 @@ import ErrorPage from '../client/common/screens/Error';
 
 export default [
   { component: App,
-    routes: [
-      { path: '/',
-        exact: true,
-        component: Home,
-      },
-      { path: '/search/:type/:query',
-        component: Search,
-      },
-      { path: '/films',
-        component: Films,
-      },
-      { path: '/people',
-        component: People,
-      },
-      { path: '/planets',
-        component: Planets,
-      },
-      { path: '/species',
-        component: Species,
-      },
-      { path: '/starships',
-        component: Starships,
-      },
-      { path: '/vehicles',
-        component: Vehicles,
-      },
-      { path: '/:errorPage',
-        component: ErrorPage,
-      },
-    ],
+    routes: [{
+      path: '/',
+      exact: true,
+      component: Home,
+    }, {
+      path: '/search/:type/:query',
+      component: Search,
+    }, {
+      path: '/films',
+      component: Films,
+    }, {
+      path: '/people',
+      component: People,
+    }, {
+      path: '/planets',
+      component: Planets,
+    }, {
+      path: '/species',
+      component: Species,
+    }, {
+      path: '/starships',
+      component: Starships,
+    }, {
+      path: '/vehicles',
+      component: Vehicles,
+    }, {
+      path: '/*',
+      component: ErrorPage,
+    }],
   },
 ];
 

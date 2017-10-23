@@ -5,6 +5,7 @@ const StartServerPlugin = require('start-server-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
+  devtool: 'cheap-module-source-map',
   entry: [
     'webpack/hot/poll?1000',
     './src',
@@ -54,7 +55,10 @@ module.exports = {
   },
   plugins: [
     new ExtractTextPlugin('client.css'),
-    new StartServerPlugin('server.js'),
+    new StartServerPlugin({
+      name: 'server.js',
+      nodeArgs: ['--inspect'],
+    }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

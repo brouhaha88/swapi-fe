@@ -3,7 +3,7 @@ const path = require('path');
 // const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  devtool: 'inline-source-map',
+  devtool: 'cheap-module-source-map',
   entry: [
     'babel-polyfill',
     'webpack-hot-middleware/client',
