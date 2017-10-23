@@ -41,6 +41,7 @@ router.get('*', (req, res) => {
         </head>
         <body>
           <section id="root">${application}</section>
+          <script>window.__STATE__ = '${JSON.stringify(store.getState())}'</script>
           <script src="http://localhost:3000/public/client.js"></script>
         </body>
       </html>

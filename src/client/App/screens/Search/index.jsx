@@ -14,7 +14,7 @@ import SearchPane from './components/SearchPane';
 
 class Search extends React.Component {
   componentDidMount() {
-    this.props.searchSwapi();
+    if (!this.props.searchResults.results.length) this.props.searchSwapi();
   }
 
   componentWillReceiveProps(nextProps) {

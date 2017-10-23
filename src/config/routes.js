@@ -7,7 +7,7 @@ import Planets from '../client/App/screens/Planets';
 import Species from '../client/App/screens/Species';
 import Starships from '../client/App/screens/Starships';
 import Vehicles from '../client/App/screens/Vehicles';
-import ErrorPage from '../common/screens/Error';
+import ErrorPage from '../client/common/screens/Error';
 
 export default [
   { component: App,
@@ -43,3 +43,7 @@ export default [
     ],
   },
 ];
+
+if (module.hot) {
+  module.hot.decline('../client');
+}

@@ -15,6 +15,11 @@ const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_E
   compose;
 const store = createStore(
   reducers,
+  // eslint-disable-next-line no-underscore-dangle
+  typeof window === 'object' && window.__STATE__ ?
+    // eslint-disable-next-line no-underscore-dangle
+    JSON.parse(window.__STATE__) :
+    {},
   composeEnhancers(
     applyMiddleware(
       thunk,
@@ -22,6 +27,11 @@ const store = createStore(
     ),
   ),
 );
+
+if (typeof window === 'object') {
+  // eslint-disable-next-line no-underscore-dangle
+  delete window.__STATE__;
+}
 
 export {
   store,

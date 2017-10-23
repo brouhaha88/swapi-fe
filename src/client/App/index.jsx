@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { renderRoutes } from 'react-router-config';
 import AppContainer from 'grommet/components/App';
-import Article from 'grommet/components/Article';
 
 import {
   updateSearchType,
@@ -17,21 +16,19 @@ import './index.scss';
 
 class App extends React.Component {
   componentDidMount() {
-    this.props.fetchSwapiTypes();
+    if (!this.props.search.types.length) this.props.fetchSwapiTypes();
   }
 
   render() {
     return (
       <AppContainer centered={false}>
-        <Article>
-          <SearchHeader
-            data={this.props.search}
-            onTypeUpdate={this.props.updateSearchType}
-            onQueryUpdate={this.props.updateSearchQuery}
-          />
-          {renderRoutes(this.props.route.routes)}
-          <Sitemap />
-        </Article>
+        <SearchHeader
+          data={this.props.search}
+          onTypeUpdate={this.props.updateSearchType}
+          onQueryUpdate={this.props.updateSearchQuery}
+        />
+        {renderRoutes(this.props.route.routes)}
+        <Sitemap />
       </AppContainer>
     );
   }
