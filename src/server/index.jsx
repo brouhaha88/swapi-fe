@@ -31,23 +31,11 @@ router.get('*', (req, res) => {
         </Provider>
       </AppContainer>,
     );
-    const html = `
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <meta charset="utf-8">
-          <title>SWAPI</title>
-          <link rel="stylesheet" type="text/css" href="http://localhost:3000/public/client.css" />
-        </head>
-        <body>
-          <section id="root">${application}</section>
-          <script>window.__STATE__ = '${JSON.stringify(store.getState())}'</script>
-          <script src="http://localhost:3000/public/client.js"></script>
-        </body>
-      </html>
-    `;
 
-    res.send(html);
+    res.render('index', {
+      application,
+      state: JSON.stringify(store.getState()),
+    });
   });
 });
 

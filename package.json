@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "ejs": "^2.5.7",
     "express": "^4.16.2",
     "grommet": "^1.8.3",
     "grommet-addons": "^0.4.0",

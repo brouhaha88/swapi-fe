@@ -3,9 +3,11 @@
   <head>
     <meta charset="utf-8">
     <title>SWAPI</title>
-    <link rel="stylesheet" type="text/css" href="client.css" />
+    <link rel="stylesheet" type="text/css" href="public/client.css" />
   </head>
   <body>
-    <section id="root"></section>
+    <section id="root"><%- application %></section>
+    <script>window.__STATE__ = '<%- state %>'</script>
+    <script src="public/client.js"></script>
   </body>
 </html>

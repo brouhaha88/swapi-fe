@@ -13,6 +13,9 @@ import serverRouter from './server';
 const app = express();
 const compiler = webpack(webpackClientConfig);
 
+app.set('view engine', 'ejs');
+app.set('views', `${__dirname}/../public`);
+
 app.use('/public/', express.static('build'));
 
 app.use(webpackDevMiddleware(compiler, {

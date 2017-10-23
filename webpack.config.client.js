@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'inline-source-map',
@@ -44,10 +44,10 @@ module.exports = {
     }],
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: 'public/index.ejs',
-    }),
+    // new HtmlWebpackPlugin({
+    //   inject: true,
+    //   template: 'public/index.ejs',
+    // }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
