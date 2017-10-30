@@ -1,44 +1,44 @@
 import { push } from 'react-router-redux';
 
-import { store } from '../config';
-
-export function getSearch() {
-  return store.getState().search;
+export function getSearch(state) {
+  return state.search;
 }
 
-export function getSearchQuery() {
-  return getSearch().query;
+export function getSearchType(state) {
+  return getSearch(state).type;
 }
 
-export function getSearchType() {
-  return getSearch().type;
+export function getSearchQuery(state) {
+  return getSearch(state).query;
 }
 
 const UPDATE_SEARCH_TYPE = 'swapi/search/UPDATE_SEARCH_TYPE';
 export function updateSearchType(payload) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch({
       payload,
       type: UPDATE_SEARCH_TYPE,
     });
 
-    const query = getSearchQuery();
+    const query = getSearchQuery(getState());
 
     if (query) {
-      dispatch(push(`/search/${payload.type}/${getSearchQuery()}`));
+      dispatch(push(`/search/${payload.type}/${query}`));
     }
   };
 }
 
 const UPDATE_SEARCH_QUERY = 'swapi/search/UPDATE_SEARCH_QUERY';
 export function updateSearchQuery(payload) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch({
       payload,
       type: UPDATE_SEARCH_QUERY,
     });
 
-    dispatch(push(`/search/${getSearchType()}/${payload.query}`));
+    const type = getSearchType(getState());
+
+    dispatch(push(`/search/${type}/${payload.query}`));
   };
 }
 

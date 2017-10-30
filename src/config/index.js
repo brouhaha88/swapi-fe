@@ -1,10 +1,9 @@
 import 'isomorphic-fetch';
 
 import routes from './routes';
-import { history, store } from './store';
+import storeConfig from './store';
 
 export {
   routes,
-  store,
-  history,
+  storeConfig,
 };

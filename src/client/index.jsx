@@ -5,7 +5,10 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 
-import { routes, store, history } from '../config';
+import { routes, storeConfig } from '../config';
+
+const history = storeConfig.getHistory();
+const store = storeConfig.getStore(history);
 
 function render() {
   ReactDOM.render(

@@ -6,34 +6,51 @@ import thunk from 'redux-thunk';
 
 import reducers from '../ducks';
 
-const history = process.env.SERVER ? createMemoryHistory() : createBrowserHistory();
-const router = routerMiddleware(history);
-// eslint-disable-next-line no-underscore-dangle
-const composeEnhancers = typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
+function getComposer() {
   // eslint-disable-next-line no-underscore-dangle
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
-  compose;
-const store = createStore(
-  reducers,
-  // eslint-disable-next-line no-underscore-dangle
-  typeof window === 'object' && window.__STATE__ ?
+  return typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ?
     // eslint-disable-next-line no-underscore-dangle
-    JSON.parse(window.__STATE__) :
-    {},
-  composeEnhancers(
-    applyMiddleware(
-      thunk,
-      router,
-    ),
-  ),
-);
-
-if (typeof window === 'object') {
-  // eslint-disable-next-line no-underscore-dangle
-  delete window.__STATE__;
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ :
+    compose;
 }
 
-export {
-  store,
-  history,
+function getAndResetState() {
+  let state = {};
+
+  // eslint-disable-next-line no-underscore-dangle
+  if (typeof window === 'object' && window.__STATE__) {
+    // eslint-disable-next-line no-underscore-dangle
+    state = JSON.parse(window.__STATE__);
+
+    // eslint-disable-next-line no-underscore-dangle
+    delete window.__STATE__;
+  }
+
+  return state;
+}
+
+function getHistory(options = {}) {
+  return process.env.SERVER ?
+    createMemoryHistory(options) :
+    createBrowserHistory(options);
+}
+
+function getStore(history) {
+  const router = routerMiddleware(history);
+
+  return createStore(
+    reducers,
+    getAndResetState(),
+    getComposer()(
+      applyMiddleware(
+        thunk,
+        router,
+      ),
+    ),
+  );
+}
+
+export default {
+  getHistory,
+  getStore,
 };

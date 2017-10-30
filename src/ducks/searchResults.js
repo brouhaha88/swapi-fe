@@ -25,10 +25,10 @@ function searchedSwapiFailed(payload) {
 }
 
 export function searchSwapi(payload) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(searchSwapiStarted(payload));
 
-    return fetch(`https://swapi.co/api/${getSearchType()}/?search=${getSearchQuery()}`)
+    return fetch(`https://swapi.co/api/${getSearchType(getState())}/?search=${getSearchQuery(getState())}`)
       .then(res => res.json())
       .then(json => dispatch(searchedSwapiSuccess(json)))
       .catch(error => dispatch(searchedSwapiFailed({ error: error.message })));
