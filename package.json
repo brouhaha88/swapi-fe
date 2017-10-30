@@ -1,5 +1,5 @@
 {
-  "name": "webpack-client-boilerplate",
+  "name": "webpack-universal-boilerplate",
   "version": "0.0.1",
   "private": true,
   "description": "Minimal boilerplate to simplify kick off period of the next project.",
