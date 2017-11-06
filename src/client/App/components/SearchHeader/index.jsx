@@ -65,7 +65,6 @@ class SearchHeader extends React.Component {
               type => (
                 <Anchor
                   key={type}
-                  className="swapi-menu-item"
                   align="end"
                   reverse
                   label={type}
