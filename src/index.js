@@ -26,14 +26,20 @@ app.use(webpackHotMiddleware(compiler, {
   dynamicPublicPath: true,
 }));
 
-app.use('/', serverRouter);
+function hotReplacementMiddleware(req, res, next) {
+  let middleware = serverRouter;
+
+  if (module.hot) {
+    module.hot.accept('./server', () => {
+      middleware = serverRouter;
+    });
+  }
+
+  middleware(req, res, next);
+}
+
+app.use('/', hotReplacementMiddleware);
 
 const server = http.createServer(app);
 
 server.listen(3000);
-
-if (module.hot) {
-  module.hot.accept('./server', () => {
-    app.use('/', serverRouter);
-  });
-}
