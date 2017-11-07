@@ -42,7 +42,3 @@ export default [
     }],
   },
 ];
-
-if (module.hot) {
-  module.hot.decline('../client');
-}

@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { renderRoutes, matchRoutes } from 'react-router-config';
 import { ConnectedRouter } from 'react-router-redux';
 
-import { routes, storeConfig } from '../config';
+import { routes, storeConfig } from '../../config';
 
 const router = express.Router();
 

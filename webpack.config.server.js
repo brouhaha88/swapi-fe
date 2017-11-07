@@ -8,7 +8,7 @@ module.exports = {
   devtool: 'cheap-module-source-map',
   entry: [
     'webpack/hot/poll?1000',
-    './src',
+    './src/server',
   ],
   watch: true,
   target: 'node',

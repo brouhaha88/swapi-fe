@@ -6,8 +6,11 @@
     <link rel="stylesheet" type="text/css" href="/public/client.css" />
   </head>
   <body>
-    <section id="root"><%- application %></section>
-    <script>window.__STATE__ = '<%- state %>'</script>
+    <div id="root"><%- application %></div>
+
+    <script>
+      window.__STATE__ = '<%- state %>';
+    </script>
     <script src="/public/client.js"></script>
   </body>
 </html>
