@@ -1,3 +1,4 @@
+import { URL } from 'url';
 import express from 'express';
 
 import React from 'react';
@@ -12,10 +13,21 @@ import { routes, storeConfig } from '../../config';
 const router = express.Router();
 
 router.get('*', (req, res) => {
-  const components = matchRoutes(routes, req.path);
+  const requestUrl = new URL(`${req.protocol}://${req.hostname}${req.originalUrl}`);
+  const components = matchRoutes(routes, requestUrl.pathname);
   const promises = [];
-  const history = storeConfig.getHistory();
-  const store = storeConfig.getStore(history);
+  const history = storeConfig.getHistory({
+    initialEntries: [`${requestUrl.pathname}${requestUrl.search}`],
+    initialIndex: 0,
+  });
+  const store = storeConfig.getStore(history, {
+    router: {
+      location: {
+        pathname: requestUrl.pathname,
+        search: requestUrl.search,
+      },
+    },
+  });
 
   for (let i = 0, length = components.length; i < length; i += 1) {
     const { fetchData } = components[i].route.component;
@@ -24,6 +36,7 @@ router.get('*', (req, res) => {
   }
 
   return Promise.all(promises).then(() => {
+    console.log(store.getState());
     const application = renderToString(
       <AppContainer>
         <Provider store={store}>

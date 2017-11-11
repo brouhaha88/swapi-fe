@@ -1,106 +1,73 @@
-import { push } from 'react-router-redux';
+import qs from 'qs';
 
-export function getSearch(state) {
-  return state.search;
+function getRouter(state) {
+  return state.router || {};
 }
 
-export function getSearchType(state) {
-  return getSearch(state).type;
+function getLocation(state) {
+  return getRouter(state).location || {};
 }
 
-export function getSearchQuery(state) {
-  return getSearch(state).query;
+function getSearch(state) {
+  return getLocation(state).search || {};
 }
 
-const UPDATE_SEARCH_TYPE = 'swapi/search/UPDATE_SEARCH_TYPE';
-export function updateSearchType(payload) {
-  return (dispatch, getState) => {
-    dispatch({
-      payload,
-      type: UPDATE_SEARCH_TYPE,
-    });
-
-    const query = getSearchQuery(getState());
-
-    if (query) {
-      dispatch(push(`/search/${payload.type}/${query}`));
-    }
-  };
-}
-
-const UPDATE_SEARCH_QUERY = 'swapi/search/UPDATE_SEARCH_QUERY';
-export function updateSearchQuery(payload) {
-  return (dispatch, getState) => {
-    dispatch({
-      payload,
-      type: UPDATE_SEARCH_QUERY,
-    });
-
-    const type = getSearchType(getState());
-
-    dispatch(push(`/search/${type}/${payload.query}`));
-  };
-}
-
-const FETCH_SWAPI_TYPES_STARTED = 'swapi/search/FETCH_SWAPI_TYPES_STARTED';
-function fetchSwapiTypesStarted(payload = { fetching: true }) {
+const SEARCH_STARTED = 'swapi/search/SEARCH_STARTED';
+function searchStarted(payload = { fetching: true }) {
   return {
     payload,
-    type: FETCH_SWAPI_TYPES_STARTED,
+    type: SEARCH_STARTED,
   };
 }
 
-const FETCHED_SWAPI_TYPES_SUCCESS = 'swapi/search/FETCHED_SWAPI_TYPES_SUCCESS';
-function fetchedSwapiTypesSuccess(payload) {
+const SEARCH_SUCCESS = 'swapi/search/SEARCH_SUCCESS';
+function searchSuccess(payload) {
   return {
     payload: Object.assign({}, payload, { fetching: false }),
-    type: FETCHED_SWAPI_TYPES_SUCCESS,
+    type: SEARCH_SUCCESS,
   };
 }
 
-const FETCHED_SWAPI_TYPES_FAILED = 'swapi/search/FETCHED_SWAPI_TYPES_FAILED';
-function fetchedSwapiTypesFailed(payload) {
+const SEARCH_FAILED = 'swapi/search/SEARCH_FAILED';
+function searchFailed(payload) {
   return {
     payload: Object.assign({}, payload, { fetching: false }),
-    type: FETCHED_SWAPI_TYPES_FAILED,
+    type: SEARCH_FAILED,
   };
 }
 
-export function fetchSwapiTypes(payload) {
-  return (dispatch) => {
-    dispatch(fetchSwapiTypesStarted(payload));
+export function startSearch(payload) {
+  return (dispatch, getState) => {
+    const searchQuery = getSearch(getState());
+    const { t, q } = qs.parse(searchQuery, { ignoreQueryPrefix: true });
 
-    return fetch('https://swapi.co/api/')
+    dispatch(searchStarted(Object.assign({}, payload, { t, q })));
+
+    return fetch(`https://swapi.co/api/${t}/?search=${q}`)
       .then(res => res.json())
-      .then((json) => {
-        const types = Object.keys(json);
-
-        dispatch(updateSearchType({ type: types[0] || '' }));
-        dispatch(fetchedSwapiTypesSuccess({ types }));
-      })
-      .catch(error => dispatch(fetchedSwapiTypesFailed({ error: error.message })));
+      .then(json => dispatch(searchSuccess(json)))
+      .catch(error => dispatch(searchFailed({ error: error.message })));
   };
 }
 
 const initialState = {
-  type: '',
-  query: '',
-  types: [],
+  t: '',
+  q: '',
   fetching: false,
   error: '',
+  count: 0,
+  next: null,
+  previous: null,
+  results: [],
 };
 
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
-    case FETCH_SWAPI_TYPES_STARTED:
+    case SEARCH_STARTED:
       return Object.assign({}, state, payload);
-    case FETCHED_SWAPI_TYPES_SUCCESS:
+    case SEARCH_SUCCESS:
       return Object.assign({}, state, payload);
-    case FETCHED_SWAPI_TYPES_FAILED:
-      return Object.assign({}, state, payload);
-    case UPDATE_SEARCH_TYPE:
-      return Object.assign({}, state, payload);
-    case UPDATE_SEARCH_QUERY:
+    case SEARCH_FAILED:
       return Object.assign({}, state, payload);
     default:
       return state;

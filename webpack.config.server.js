@@ -11,6 +11,7 @@ module.exports = {
     './src/server',
   ],
   watch: true,
+  stats: 'minimal',
   target: 'node',
   node: {
     __dirname: false,

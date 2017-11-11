@@ -18,6 +18,7 @@ listener.use('/public/', express.static('build'));
 
 listener.use(webpackDevMiddleware(compiler, {
   publicPath: webpackClientConfig.output.publicPath,
+  noInfo: true,
   stats: {
     colors: true,
   },

@@ -1,13 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 import AppContainer from 'grommet/components/App';
 
 import {
-  updateSearchType,
-  updateSearchQuery,
-  fetchSwapiTypes,
-} from '../../ducks/search';
+  fetchSearchTypes,
+} from '../../ducks/metadata';
 
 import SearchHeader from './components/SearchHeader';
 import Sitemap from './components/Sitemap';
@@ -16,16 +15,15 @@ import './index.scss';
 
 class App extends React.Component {
   componentDidMount() {
-    if (!this.props.search.types.length) this.props.fetchSwapiTypes();
+    if (!this.props.metadata.searchTypes.length) this.props.fetchSearchTypes();
   }
 
   render() {
     return (
       <AppContainer centered={false}>
         <SearchHeader
-          data={this.props.search}
-          onTypeUpdate={this.props.updateSearchType}
-          onQueryUpdate={this.props.updateSearchQuery}
+          data={this.props.metadata}
+          onUpdate={this.props.startSearch}
         />
         {renderRoutes(this.props.route.routes)}
         <Sitemap />
@@ -34,22 +32,26 @@ class App extends React.Component {
   }
 }
 
-function mapStateToProps({ search }) {
+function mapStateToProps({ metadata }) {
   return {
-    search,
+    metadata,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    fetchSwapiTypes: payload => dispatch(fetchSwapiTypes(payload)),
-    updateSearchType: payload => dispatch(updateSearchType(payload)),
-    updateSearchQuery: payload => dispatch(updateSearchQuery(payload)),
+    fetchSearchTypes: payload => dispatch(fetchSearchTypes(payload)),
+    startSearch: (payload) => {
+      const { type, query } = payload;
+      const searchPath = `/search?t=${type}&q=${query}`;
+
+      return dispatch(push(searchPath));
+    },
   };
 }
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
 
-ConnectedApp.fetchData = (store, payload) => store.dispatch(fetchSwapiTypes(payload));
+ConnectedApp.fetchData = (store, payload) => store.dispatch(fetchSearchTypes(payload));
 
 export default ConnectedApp;

@@ -10,6 +10,7 @@ module.exports = {
     'react-hot-loader/patch',
     './src/client',
   ],
+  stats: 'minimal',
   target: 'web',
   module: {
     rules: [{

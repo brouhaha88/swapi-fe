@@ -8,26 +8,25 @@ import Tiles from 'grommet/components/Tiles';
 import Value from 'grommet/components/Value';
 import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
 
-import { searchSwapi } from '../../../../ducks/searchResults';
+import { startSearch } from '../../../../ducks/search';
 
 import SearchPane from './components/SearchPane';
 
 class Search extends React.Component {
   componentDidMount() {
-    if (!this.props.searchResults.results.length) this.props.searchSwapi();
+    if (!this.props.search.results.length) this.props.startSearch();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { type, query } = this.props.search;
+    const { search } = this.props.location;
 
-    if (nextProps.search.type !== type || nextProps.search.query !== query) {
-      this.props.searchSwapi();
+    if (nextProps.location.search !== search) {
+      this.props.startSearch();
     }
   }
 
   get searchTiles() {
-    const { type } = this.props.search;
-    const { results } = this.props.searchResults;
+    const { type, results } = this.props.search;
 
     return (
       <Tiles fill>
@@ -41,19 +40,17 @@ class Search extends React.Component {
   }
 
   get placeHolder() {
-    const { type, query } = this.props.search;
-    const { fetching } = this.props.searchResults;
+    const { t, q, fetching } = this.props.search;
 
     return fetching ?
       <ListPlaceholder /> :
       <Headline align="center">
-        {`Cannot find "${query}" in ${type} collection. :(`}
+        {`Cannot find "${q}" in ${t} collection. :(`}
       </Headline>;
   }
 
   get meter() {
-    const { type } = this.props.search;
-    const { results, count } = this.props.searchResults;
+    const { results, count, type } = this.props.search;
 
     return count ? (
       <Box align="center">
@@ -69,7 +66,7 @@ class Search extends React.Component {
   }
 
   render() {
-    const { count } = this.props.searchResults;
+    const { count } = this.props.search;
 
     return (
       <Section>
@@ -86,21 +83,20 @@ class Search extends React.Component {
   }
 }
 
-function mapStateToProps({ searchResults, search }) {
+function mapStateToProps({ search }) {
   return {
     search,
-    searchResults,
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    searchSwapi: payload => dispatch(searchSwapi(payload)),
+    startSearch: payload => dispatch(startSearch(payload)),
   };
 }
 
 const ConnectedSearch = connect(mapStateToProps, mapDispatchToProps)(Search);
 
-ConnectedSearch.fetchData = (store, payload) => store.dispatch(searchSwapi(payload));
+ConnectedSearch.fetchData = (store, payload) => store.dispatch(startSearch(payload));
 
 export default ConnectedSearch;

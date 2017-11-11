@@ -16,6 +16,7 @@ class SearchHeader extends React.Component {
 
     this.private = {
       throttleTimeout: -1,
+      type: '',
     };
 
     this.onHeaderSearch = this.onHeaderSearch.bind(this);
@@ -30,17 +31,18 @@ class SearchHeader extends React.Component {
   setCurrentResourceType(type) {
     if (!type) return;
 
-    this.props.onTypeUpdate({ type });
+    this.private.type = type;
   }
 
   getCurrentResourceType() {
-    const { types, type } = this.props.data;
+    const { searchTypes } = this.props.data;
+    const { type } = this.private;
 
-    return type || types[0] || '';
+    return type || searchTypes[0] || '';
   }
 
   get menu() {
-    const { types, fetching, error } = this.props.data;
+    const { searchTypes, fetching, error } = this.props.data;
 
     return (
       <Menu
@@ -61,7 +63,7 @@ class SearchHeader extends React.Component {
             >
               {error}
             </Heading> :
-            types.map(
+            searchTypes.map(
               type => (
                 <Anchor
                   key={type}
@@ -93,7 +95,10 @@ class SearchHeader extends React.Component {
 
     if (!type) return;
 
-    this.props.onQueryUpdate({ query: query || ' ' });
+    this.props.onUpdate({
+      type,
+      query,
+    });
   }
 
   componentWillUmount() {

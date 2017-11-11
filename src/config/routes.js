@@ -16,7 +16,7 @@ export default [
       exact: true,
       component: Home,
     }, {
-      path: '/search/:type/:query',
+      path: '/search',
       component: Search,
     }, {
       path: '/films',

@@ -29,24 +29,17 @@ function getAndResetState() {
   return state;
 }
 
-function getHistory(options = {}) {
-  return process.env.SERVER ?
-    createMemoryHistory(options) :
-    createBrowserHistory(options);
+function getHistory() {
+  return process.env.SERVER ? createMemoryHistory() : createBrowserHistory();
 }
 
-function getStore(history) {
+function getStore(history, serverState) {
   const router = routerMiddleware(history);
 
   return createStore(
     reducers,
-    getAndResetState(),
-    getComposer()(
-      applyMiddleware(
-        thunk,
-        router,
-      ),
-    ),
+    process.env.SERVER ? serverState : getAndResetState(),
+    getComposer()(applyMiddleware(thunk, router)),
   );
 }
 
