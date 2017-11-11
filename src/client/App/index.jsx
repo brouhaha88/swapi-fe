@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
+import { Helmet } from 'react-helmet';
 import AppContainer from 'grommet/components/App';
 
 import {
@@ -11,7 +12,8 @@ import {
 import SearchHeader from './components/SearchHeader';
 import Sitemap from './components/Sitemap';
 
-import './index.scss';
+import favicon from './assets/fav.ico';
+import './assets/index.scss';
 
 class App extends React.Component {
   componentDidMount() {
@@ -21,6 +23,9 @@ class App extends React.Component {
   render() {
     return (
       <AppContainer centered={false}>
+        <Helmet>
+          <link rel="icon" href={favicon} />
+        </Helmet>
         <SearchHeader
           data={this.props.metadata}
           onUpdate={this.props.startSearch}

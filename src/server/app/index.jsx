@@ -6,7 +6,8 @@ import { renderToString } from 'react-dom/server';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import { renderRoutes, matchRoutes } from 'react-router-config';
-import { ConnectedRouter } from 'react-router-redux';
+import { ConnectedRouter, push } from 'react-router-redux';
+import { Helmet } from 'react-helmet';
 
 import { routes, storeConfig } from '../../config';
 
@@ -16,10 +17,7 @@ router.get('*', (req, res) => {
   const requestUrl = new URL(`${req.protocol}://${req.hostname}${req.originalUrl}`);
   const components = matchRoutes(routes, requestUrl.pathname);
   const promises = [];
-  const history = storeConfig.getHistory({
-    initialEntries: [`${requestUrl.pathname}${requestUrl.search}`],
-    initialIndex: 0,
-  });
+  const history = storeConfig.getHistory();
   const store = storeConfig.getStore(history, {
     router: {
       location: {
@@ -29,6 +27,8 @@ router.get('*', (req, res) => {
     },
   });
 
+  store.dispatch(push(`${requestUrl.pathname}${requestUrl.search}`));
+
   for (let i = 0, length = components.length; i < length; i += 1) {
     const { fetchData } = components[i].route.component;
 
@@ -36,7 +36,6 @@ router.get('*', (req, res) => {
   }
 
   return Promise.all(promises).then(() => {
-    console.log(store.getState());
     const application = renderToString(
       <AppContainer>
         <Provider store={store}>
@@ -46,8 +45,10 @@ router.get('*', (req, res) => {
         </Provider>
       </AppContainer>,
     );
+    const head = Helmet.renderStatic();
 
     res.render('index', {
+      head,
       application,
       state: JSON.stringify(store.getState()),
     });

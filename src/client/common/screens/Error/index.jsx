@@ -9,7 +9,7 @@ class Error extends React.Component {
       <Section>
         <Box align="center">
           <Headline align="center">
-            Oops! We cannot find {this.props.location.pathname}
+            {`Oops! We cannot find "${this.props.location.pathname}"`}
           </Headline>
         </Box>
       </Section>
