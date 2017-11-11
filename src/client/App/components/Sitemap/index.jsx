@@ -6,7 +6,7 @@ import Menu from 'grommet/components/Menu';
 import Paragraph from 'grommet/components/Paragraph';
 import Title from 'grommet/components/Title';
 
-import './index.scss';
+import './assets/index.scss';
 
 class Sitemap extends React.Component {
   constructor(...args) {

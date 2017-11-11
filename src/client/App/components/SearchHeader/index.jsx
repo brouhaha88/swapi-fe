@@ -6,7 +6,7 @@ import Menu from 'grommet/components/Menu';
 import Search from 'grommet/components/Search';
 import Spinning from 'grommet/components/icons/Spinning';
 
-import './index.scss';
+import './assets/index.scss';
 
 const DELAY = 333;
 
