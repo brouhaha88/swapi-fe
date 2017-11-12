@@ -8,7 +8,7 @@ import Tiles from 'grommet/components/Tiles';
 import Value from 'grommet/components/Value';
 import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
 
-import { startSearch } from '../../../../ducks/search';
+import { startSearch, startSearchMore } from '../../../../ducks/search';
 
 import SearchPane from './components/SearchPane';
 
@@ -26,10 +26,13 @@ class Search extends React.Component {
   }
 
   get searchTiles() {
-    const { t, results } = this.props.search;
+    const { t, results, next, fetching } = this.props.search;
 
     return (
-      <Tiles fill>
+      <Tiles
+        fill
+        onMore={next && !fetching ? () => this.props.startSearchMore() : null}
+      >
         {
           results.map(
             item => <SearchPane key={item.url} type={t} data={item} />,
@@ -92,6 +95,7 @@ function mapStateToProps({ search }) {
 function mapDispatchToProps(dispatch) {
   return {
     startSearch: payload => dispatch(startSearch(payload)),
+    startSearchMore: payload => dispatch(startSearchMore(payload)),
   };
 }
 

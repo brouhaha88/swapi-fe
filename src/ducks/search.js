@@ -4,12 +4,16 @@ function getRouter(state) {
   return state.router || {};
 }
 
-function getLocation(state) {
+function getRouterLocation(state) {
   return getRouter(state).location || {};
 }
 
+function getRouterLocationSearch(state) {
+  return getRouterLocation(state).search || {};
+}
+
 function getSearch(state) {
-  return getLocation(state).search || {};
+  return state.search || {};
 }
 
 const SEARCH_STARTED = 'swapi/search/SEARCH_STARTED';
@@ -38,7 +42,7 @@ function searchFailed(payload) {
 
 export function startSearch(payload) {
   return (dispatch, getState) => {
-    const searchQuery = getSearch(getState());
+    const searchQuery = getRouterLocationSearch(getState());
     const { t, q } = qs.parse(searchQuery, { ignoreQueryPrefix: true });
 
     dispatch(searchStarted(Object.assign({}, payload, { t, q })));
@@ -47,6 +51,47 @@ export function startSearch(payload) {
       .then(res => res.json())
       .then(json => dispatch(searchSuccess(json)))
       .catch(error => dispatch(searchFailed({ error: error.message })));
+  };
+}
+
+const SEARCH_MORE_STARTED = 'swapi/search/SEARCH_MORE_STARTED';
+function searchMoreStarted(payload = { fetching: true }) {
+  return {
+    payload,
+    type: SEARCH_MORE_STARTED,
+  };
+}
+
+const SEARCH_MORE_SUCCESS = 'swapi/search/SEARCH_MORE_SUCCESS';
+function searchMoreSuccess(payload) {
+  return {
+    payload: Object.assign({}, payload, { fetching: false }),
+    type: SEARCH_MORE_SUCCESS,
+  };
+}
+
+const SEARCH_MORE_FAILED = 'swapi/search/SEARCH_MORE_FAILED';
+function searchMoreFailed(payload) {
+  return {
+    payload: Object.assign({}, payload, { fetching: false }),
+    type: SEARCH_MORE_FAILED,
+  };
+}
+
+export function startSearchMore(payload) {
+  return (dispatch, getState) => {
+    const { next, results } = getSearch(getState());
+
+    dispatch(searchMoreStarted(payload));
+
+    return fetch(next)
+      .then(res => res.json())
+      .then(json => dispatch(searchMoreSuccess({
+        next: json.next,
+        previous: json.previous,
+        results: [...results, ...json.results],
+      })))
+      .catch(error => dispatch(searchMoreFailed({ error: error.message })));
   };
 }
 
@@ -66,6 +111,9 @@ export default function reducer(state = initialState, { type, payload }) {
     case SEARCH_STARTED:
     case SEARCH_SUCCESS:
     case SEARCH_FAILED:
+    case SEARCH_MORE_STARTED:
+    case SEARCH_MORE_SUCCESS:
+    case SEARCH_MORE_FAILED:
       return Object.assign({}, state, payload);
     default:
       return state;
