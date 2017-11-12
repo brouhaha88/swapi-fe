@@ -11,7 +11,7 @@ const history = storeConfig.getHistory();
 const store = storeConfig.getStore(history);
 
 function render() {
-  ReactDOM.render(
+  ReactDOM.hydrate(
     <AppContainer>
       <Provider store={store}>
         <ConnectedRouter history={history}>
