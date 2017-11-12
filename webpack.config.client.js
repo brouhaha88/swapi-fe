@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const path = require('path');
-// const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -28,7 +27,7 @@ module.exports = {
       }, {
         loader: 'css-loader',
       }, {
-        loader: 'sass-loader',
+        loader: 'postcss-loader',
         options: {
           includePaths: ['./node_modules'],
         },
@@ -45,10 +44,6 @@ module.exports = {
     }],
   },
   plugins: [
-    // new HtmlWebpackPlugin({
-    //   inject: true,
-    //   template: 'public/index.ejs',
-    // }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

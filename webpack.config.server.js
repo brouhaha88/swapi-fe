@@ -38,7 +38,7 @@ module.exports = {
         use: [{
           loader: 'css-loader',
         }, {
-          loader: 'sass-loader',
+          loader: 'postcss-loader',
           options: {
             includePaths: ['./node_modules'],
           },
