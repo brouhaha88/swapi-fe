@@ -26,13 +26,13 @@ class Search extends React.Component {
   }
 
   get searchTiles() {
-    const { type, results } = this.props.search;
+    const { t, results } = this.props.search;
 
     return (
       <Tiles fill>
         {
           results.map(
-            item => <SearchPane key={item.url} type={type} data={item} />,
+            item => <SearchPane key={item.url} type={t} data={item} />,
           )
         }
       </Tiles>
@@ -50,14 +50,14 @@ class Search extends React.Component {
   }
 
   get meter() {
-    const { results, count, type } = this.props.search;
+    const { results, count, t } = this.props.search;
 
     return count ? (
       <Box align="center">
         <Meter value={(results.length * 100) / count} />
         <Value
           value={results.length}
-          units={type}
+          units={t}
           align="center"
         />
       </Box>
