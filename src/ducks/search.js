@@ -64,9 +64,7 @@ const initialState = {
 export default function reducer(state = initialState, { type, payload }) {
   switch (type) {
     case SEARCH_STARTED:
-      return Object.assign({}, state, payload);
     case SEARCH_SUCCESS:
-      return Object.assign({}, state, payload);
     case SEARCH_FAILED:
       return Object.assign({}, state, payload);
     default:
