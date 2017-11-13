@@ -1,55 +1,45 @@
+const FETCH_SEARCH_TYPES_SUCCESS = 'swapi/metadata/FETCH_SEARCH_TYPES_SUCCESS';
+const fetchSearchTypesSuccess = payload => ({
+  payload: Object.assign({}, payload, { fetching: false }),
+  type: FETCH_SEARCH_TYPES_SUCCESS,
+});
+
+const FETCH_SEARCH_TYPES_FAILED = 'swapi/metadata/FETCH_SEARCH_TYPES_FAILED';
+const fetchSearchTypesFailed = payload => ({
+  payload: Object.assign({}, payload, { fetching: false }),
+  type: FETCH_SEARCH_TYPES_FAILED,
+});
+
 const FETCH_SEARCH_TYPES_STARTED = 'swapi/metadata/FETCH_SEARCH_TYPES_STARTED';
-function fetchSearchTypesStarted(payload = { fetching: true }) {
-  return {
-    payload,
+export const fetchSearchTypes = payload => (dispatch) => {
+  dispatch({
+    payload: Object.assign({}, payload, { fetching: true }),
     type: FETCH_SEARCH_TYPES_STARTED,
-  };
-}
+  });
 
-const FETCHED_SEARCH_TYPES_SUCCESS = 'swapi/metadata/FETCHED_SEARCH_TYPES_SUCCESS';
-function fetchedSearchTypesSuccess(payload) {
-  return {
-    payload: Object.assign({}, payload, { fetching: false }),
-    type: FETCHED_SEARCH_TYPES_SUCCESS,
-  };
-}
+  return fetch('https://swapi.co/api/')
+    .then(res => res.json())
+    .then((json) => {
+      const searchTypes = Object.keys(json);
 
-const FETCHED_SEARCH_TYPES_FAILED = 'swapi/metadata/FETCHED_SEARCH_TYPES_FAILED';
-function fetchedSearchTypesFailed(payload) {
-  return {
-    payload: Object.assign({}, payload, { fetching: false }),
-    type: FETCHED_SEARCH_TYPES_FAILED,
-  };
-}
-
-export function fetchSearchTypes(payload) {
-  return (dispatch) => {
-    dispatch(fetchSearchTypesStarted(payload));
-
-    return fetch('https://swapi.co/api/')
-      .then(res => res.json())
-      .then((json) => {
-        const searchTypes = Object.keys(json);
-
-        dispatch(fetchedSearchTypesSuccess({ searchTypes }));
-      })
-      .catch(error => dispatch(fetchedSearchTypesFailed({ error: error.message })));
-  };
-}
-
-const initialState = {
-  searchTypes: [],
-  fetching: false,
-  error: '',
+      dispatch(fetchSearchTypesSuccess({ searchTypes }));
+    })
+    .catch(error => dispatch(fetchSearchTypesFailed({ error: error.message })));
 };
 
-export default function reducer(state = initialState, { type, payload }) {
+const initialState = {
+  fetching: false,
+  error: '',
+  searchTypes: [],
+};
+
+export default (state = initialState, { type, payload }) => {
   switch (type) {
     case FETCH_SEARCH_TYPES_STARTED:
-    case FETCHED_SEARCH_TYPES_SUCCESS:
-    case FETCHED_SEARCH_TYPES_FAILED:
+    case FETCH_SEARCH_TYPES_SUCCESS:
+    case FETCH_SEARCH_TYPES_FAILED:
       return Object.assign({}, state, payload);
     default:
       return state;
   }
-}
+};

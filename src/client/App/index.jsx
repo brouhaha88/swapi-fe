@@ -28,7 +28,7 @@ class App extends React.Component {
         </Helmet>
         <SearchHeader
           data={this.props.metadata}
-          onUpdate={this.props.startSearch}
+          onUpdate={this.props.goToSearch}
         />
         {renderRoutes(this.props.route.routes)}
         <SitemapFooter />
@@ -37,23 +37,17 @@ class App extends React.Component {
   }
 }
 
-function mapStateToProps({ metadata }) {
-  return {
-    metadata,
-  };
-}
+const mapStateToProps = ({ metadata }) => ({ metadata });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    fetchSearchTypes: payload => dispatch(fetchSearchTypes(payload)),
-    startSearch: (payload) => {
-      const { type, query } = payload;
-      const searchPath = `/search?t=${type}&q=${query}`;
+const mapDispatchToProps = dispatch => ({
+  fetchSearchTypes: payload => dispatch(fetchSearchTypes(payload)),
+  goToSearch: (payload) => {
+    const { type, query } = payload;
+    const searchPath = `/search?t=${type}&q=${query}`;
 
-      return dispatch(push(searchPath));
-    },
-  };
-}
+    return dispatch(push(searchPath));
+  },
+});
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
 

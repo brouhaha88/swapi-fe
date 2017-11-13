@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux';
-import { routerReducer as router } from 'react-router-redux';
 
+import router from './router';
 import metadata from './metadata';
 import search from './search';
 import resources from './resources';

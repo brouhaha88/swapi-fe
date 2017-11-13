@@ -21,12 +21,12 @@ class Search extends React.Component {
     const { search } = this.props.location;
 
     if (nextProps.location.search !== search) {
-      this.props.startSearch();
+      nextProps.startSearch();
     }
   }
 
   get searchTiles() {
-    const { t, results, next, fetching } = this.props.search;
+    const { type, results, next, fetching } = this.props.search;
 
     return (
       <Tiles
@@ -35,32 +35,32 @@ class Search extends React.Component {
       >
         {
           results.map(
-            item => <SearchPane key={item.url} type={t} data={item} />,
+            item => <SearchPane key={item.url} type={type} data={item} />,
           )
         }
       </Tiles>
     );
   }
 
-  get placeHolder() {
-    const { t, q, fetching } = this.props.search;
+  get placeholder() {
+    const { type, query, fetching } = this.props.search;
 
     return fetching ?
       <ListPlaceholder /> :
       <Headline align="center">
-        {`Cannot find "${q}" in ${t} collection. :(`}
+        {`Cannot find "${query}" in ${type} collection. :(`}
       </Headline>;
   }
 
   get meter() {
-    const { results, count, t } = this.props.search;
+    const { results, count, type } = this.props.search;
 
     return count ? (
       <Box align="center">
         <Meter value={(results.length * 100) / count} />
         <Value
           value={results.length}
-          units={t}
+          units={type}
           align="center"
         />
       </Box>
@@ -77,7 +77,7 @@ class Search extends React.Component {
           {
             count
               ? this.searchTiles
-              : this.placeHolder
+              : this.placeholder
           }
         </Box>
         {this.meter}
@@ -86,18 +86,12 @@ class Search extends React.Component {
   }
 }
 
-function mapStateToProps({ search }) {
-  return {
-    search,
-  };
-}
+const mapStateToProps = ({ search }) => ({ search });
 
-function mapDispatchToProps(dispatch) {
-  return {
-    startSearch: payload => dispatch(startSearch(payload)),
-    startSearchMore: payload => dispatch(startSearchMore(payload)),
-  };
-}
+const mapDispatchToProps = dispatch => ({
+  startSearch: payload => dispatch(startSearch(payload)),
+  startSearchMore: payload => dispatch(startSearchMore(payload)),
+});
 
 const ConnectedSearch = connect(mapStateToProps, mapDispatchToProps)(Search);
 
