@@ -2,14 +2,14 @@ import React from 'react';
 
 import Section from 'grommet/components/Section';
 
-class Vehicles extends React.Component {
+class Resource extends React.Component {
   render() {
     return (
       <Section>
-        Vehicles
+        {this.props.location.pathname}
       </Section>
     );
   }
 }
 
-export default Vehicles;
+export default Resource;

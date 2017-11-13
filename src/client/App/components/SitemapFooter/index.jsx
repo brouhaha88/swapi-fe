@@ -8,7 +8,7 @@ import Title from 'grommet/components/Title';
 
 import './assets/index.scss';
 
-class Sitemap extends React.Component {
+class SitemapFooter extends React.Component {
   constructor(...args) {
     super(...args);
 
@@ -94,4 +94,4 @@ class Sitemap extends React.Component {
   }
 }
 
-export default Sitemap;
+export default SitemapFooter;

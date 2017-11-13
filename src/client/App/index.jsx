@@ -10,7 +10,7 @@ import {
 } from '../../ducks/metadata';
 
 import SearchHeader from './components/SearchHeader';
-import Sitemap from './components/Sitemap';
+import SitemapFooter from './components/SitemapFooter';
 
 import favicon from './assets/fav.ico';
 import './assets/index.scss';
@@ -31,7 +31,7 @@ class App extends React.Component {
           onUpdate={this.props.startSearch}
         />
         {renderRoutes(this.props.route.routes)}
-        <Sitemap />
+        <SitemapFooter />
       </AppContainer>
     );
   }
