@@ -18,9 +18,9 @@ class Search extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { search } = this.props.location;
+    const { search } = this.props.router.location;
 
-    if (nextProps.location.search !== search) {
+    if (nextProps.router.location.search !== search) {
       nextProps.startSearch();
     }
   }
@@ -93,7 +93,7 @@ class Search extends React.Component {
   }
 }
 
-const mapStateToProps = ({ search }) => ({ search });
+const mapStateToProps = ({ search, router }) => ({ search, router });
 
 const mapDispatchToProps = dispatch => ({
   startSearch: payload => dispatch(startSearch(payload)),

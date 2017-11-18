@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
 import Section from 'grommet/components/Section';
 
@@ -6,10 +7,12 @@ class Resource extends React.Component {
   render() {
     return (
       <Section>
-        {this.props.location.pathname}
+        {this.props.router.location.pathname}
       </Section>
     );
   }
 }
 
-export default Resource;
+const mapStateToProps = ({ router }) => ({ router });
+
+export default connect(mapStateToProps, () => ({}))(Resource);

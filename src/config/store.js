@@ -21,9 +21,6 @@ function getAndResetState() {
   if (typeof window === 'object' && window.__STATE__) {
     // eslint-disable-next-line no-underscore-dangle
     state = JSON.parse(window.__STATE__);
-
-    // eslint-disable-next-line no-underscore-dangle
-    delete window.__STATE__;
   }
 
   return state;

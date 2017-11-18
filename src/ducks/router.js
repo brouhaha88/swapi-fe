@@ -13,7 +13,7 @@ export const changeLocation = payload => ({
 });
 
 export const CALL_HISTORY_METHOD = '@@router/CALL_HISTORY_METHOD';
-const callHistoryMethod = method => args => ({
+const callHistoryMethod = method => (...args) => ({
   payload: {
     method,
     args,

@@ -25,15 +25,15 @@ class Resources extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pathname } = this.props.location;
+    const { pathname } = this.props.router.location;
 
-    if (nextProps.location.pathname !== pathname) {
+    if (nextProps.router.location.pathname !== pathname) {
       nextProps.fetchResources();
     }
   }
 
   get resourceTiles() {
-    const { resources } = this.props;
+    const { resources, activeType } = this.props;
     const { results, next, fetching } = resources || {};
 
     return (
@@ -47,7 +47,7 @@ class Resources extends React.Component {
       >
         {
           results.map(
-            item => <SearchPane key={item.url} type={'activeType'} data={item} />,
+            item => <SearchPane key={item.url} type={activeType} data={item} />,
           )
         }
       </Tiles>
@@ -55,19 +55,19 @@ class Resources extends React.Component {
   }
 
   get placeholder() {
-    const { fetching } = this.props;
+    const { fetching, activeType } = this.props;
 
     return fetching
       ? <ListPlaceholder />
       : (
         <Headline align="center">
-          {'Cannot find "changeME!" collection. :('}
+          {`Cannot find ${activeType} collection. :(`}
         </Headline>
       );
   }
 
   get meter() {
-    const { resources } = this.props;
+    const { resources, activeType } = this.props;
     const { results, count } = resources || {};
 
     return count
@@ -76,7 +76,7 @@ class Resources extends React.Component {
           <Meter value={(results.length * 100) / count} />
           <Value
             value={results.length}
-            // units={activeType}
+            units={activeType}
             align="center"
           />
         </Box>
@@ -104,18 +104,21 @@ class Resources extends React.Component {
 }
 
 const mapStateToProps = ({
+  router,
   resources,
   resources: {
     fetching,
   },
-}, {
-  match: {
-    params,
-  },
-}) => ({
-  fetching,
-  resources: resources[params.type],
-});
+}) => {
+  const activeType = router.location.pathname.replace('/', '');
+
+  return {
+    router,
+    fetching,
+    activeType,
+    resources: resources[activeType],
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   fetchResources: payload => dispatch(fetchResources(payload)),
