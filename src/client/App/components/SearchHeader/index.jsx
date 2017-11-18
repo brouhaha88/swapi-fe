@@ -51,19 +51,25 @@ class SearchHeader extends React.Component {
           right: 'right',
           top: 'top',
         }}
-        icon={fetching ? <Spinning /> : null}
+        icon={
+          fetching
+            ? <Spinning />
+            : null
+        }
       >
         {
-          error ?
-            <Heading
-              uppercase
-              margin="none"
-              strong
-              tag="h4"
-            >
-              {error}
-            </Heading> :
-            searchTypes.map(
+          error
+            ? (
+              <Heading
+                uppercase
+                margin="none"
+                strong
+                tag="h4"
+              >
+                {error}
+              </Heading>
+            )
+            : searchTypes.map(
               type => (
                 <Anchor
                   key={type}

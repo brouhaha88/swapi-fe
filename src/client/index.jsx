@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
-import { ConnectedRouter } from 'react-router-redux';
+import { Router } from 'react-router';
 import { renderRoutes } from 'react-router-config';
 
 import { routes, storeConfig } from '../config';
@@ -14,9 +14,9 @@ function render() {
   ReactDOM.hydrate(
     <AppContainer>
       <Provider store={store}>
-        <ConnectedRouter history={history}>
+        <Router history={history}>
           {renderRoutes(routes)}
-        </ConnectedRouter>
+        </Router>
       </Provider>
     </AppContainer>,
     document.getElementById('root'),

@@ -31,7 +31,11 @@ class Search extends React.Component {
     return (
       <Tiles
         fill
-        onMore={next && !fetching ? () => this.props.startSearchMore() : null}
+        onMore={
+          next && !fetching
+            ? () => this.props.startSearchMore()
+            : null
+        }
       >
         {
           results.map(
@@ -45,27 +49,30 @@ class Search extends React.Component {
   get placeholder() {
     const { type, query, fetching } = this.props.search;
 
-    return fetching ?
-      <ListPlaceholder /> :
-      <Headline align="center">
-        {`Cannot find "${query}" in ${type} collection. :(`}
-      </Headline>;
+    return fetching
+      ? <ListPlaceholder />
+      : (
+        <Headline align="center">
+          {`Cannot find "${query}" in ${type} collection. :(`}
+        </Headline>
+      );
   }
 
   get meter() {
     const { results, count, type } = this.props.search;
 
-    return count ? (
-      <Box align="center">
-        <Meter value={(results.length * 100) / count} />
-        <Value
-          value={results.length}
-          units={type}
-          align="center"
-        />
-      </Box>
-    ) :
-      null;
+    return count
+      ? (
+        <Box align="center">
+          <Meter value={(results.length * 100) / count} />
+          <Value
+            value={results.length}
+            units={type}
+            align="center"
+          />
+        </Box>
+      )
+      : null;
   }
 
   render() {

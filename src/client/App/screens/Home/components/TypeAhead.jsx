@@ -155,7 +155,11 @@ class TypeAhead extends React.Component {
 
     return (
       <Tag>
-        {skipAnimation ? this.props.sentence : this.state.value}
+        {
+          skipAnimation
+            ? this.props.sentence
+            : this.state.value
+        }
         {this.children}
       </Tag>
     );

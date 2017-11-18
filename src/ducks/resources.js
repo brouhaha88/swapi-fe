@@ -1,39 +1,36 @@
+import { getRouterLocationPathname } from './router';
+
 const getResources = state => state.resources || {};
 
-export const getResourcesByType = (state, type) => getResources(state)[type];
+export const getResourcesByType = (state, type) => getResources(state)[type] || {};
 
-const FETCH_RESOURCES_SUCCESS = 'swapi/metadata/FETCH_RESOURCES_SUCCESS';
+const FETCH_RESOURCES_SUCCESS = 'swapi/resources/FETCH_RESOURCES_SUCCESS';
 const fetchResourcesSuccess = (payload = {}) => ({
   payload: Object.assign({}, payload, { fetching: false }),
   type: FETCH_RESOURCES_SUCCESS,
 });
 
-const FETCH_RESOURCES_FAILED = 'swapi/metadata/FETCH_RESOURCES_FAILED';
+const FETCH_RESOURCES_FAILED = 'swapi/resources/FETCH_RESOURCES_FAILED';
 const fetchResourcesFailed = (payload = {}) => ({
   payload: Object.assign({}, payload, { fetching: false }),
   type: FETCH_RESOURCES_FAILED,
 });
 
-const FETCH_RESOURCES_STARTED = 'swapi/metadata/FETCH_RESOURCES_STARTED';
-export const fetchResources = (payload = {}) => (dispatch) => {
-  const { activeType } = payload;
+const FETCH_RESOURCES_STARTED = 'swapi/resources/FETCH_RESOURCES_STARTED';
+export const fetchResources = () => (dispatch, getState) => {
+  const activeType = getRouterLocationPathname(getState()).replace('/', '');
 
   dispatch({
-    payload: {
-      fetching: true,
-      activeType: '',
-    },
+    payload: { fetching: true },
     type: FETCH_RESOURCES_STARTED,
   });
 
   return fetch(`https://swapi.co/api/${activeType}/`)
     .then(res => res.json())
     .then(json => dispatch(fetchResourcesSuccess({
-      activeType,
       [activeType]: Object.assign({}, json, { error: '' }),
     })))
     .catch(error => dispatch(fetchResourcesFailed({
-      activeType,
       [activeType]: { error: error.message },
     })));
 };
@@ -51,8 +48,8 @@ const fetchResourcesMoreFailed = (payload = {}) => ({
 });
 
 const FETCH_RESOURCES_MORE_STARTED = 'swapi/search/FETCH_RESOURCES_MORE_STARTED';
-export const fetchResourcesMore = (payload = {}) => (dispatch, getState) => {
-  const { activeType } = payload;
+export const fetchResourcesMore = () => (dispatch, getState) => {
+  const activeType = getRouterLocationPathname(getState()).replace('/', '');
   const resources = getResourcesByType(getState(), activeType);
 
   dispatch({ type: FETCH_RESOURCES_MORE_STARTED });
@@ -71,7 +68,6 @@ export const fetchResourcesMore = (payload = {}) => (dispatch, getState) => {
 const initialState = {
   fetching: false,
   error: '',
-  activeType: '',
 };
 
 export default (state = initialState, { type, payload }) => {

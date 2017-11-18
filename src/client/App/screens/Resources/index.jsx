@@ -17,35 +17,37 @@ import { fetchResources, fetchResourcesMore } from '../../../../ducks/resources'
 
 class Resources extends React.Component {
   componentDidMount() {
-    const { resources, match } = this.props;
-    const { type: activeType } = match.params;
+    const { resources } = this.props;
 
     if (!resources) {
-      this.props.fetchResources({ activeType });
+      this.props.fetchResources();
     }
   }
 
   componentWillReceiveProps(nextProps) {
     const { pathname } = this.props.location;
-    const { type: activeType } = nextProps.match.params;
 
     if (nextProps.location.pathname !== pathname) {
-      nextProps.fetchResources({ activeType });
+      nextProps.fetchResources();
     }
   }
 
   get resourceTiles() {
-    const { activeType, resources } = this.props;
+    const { resources } = this.props;
     const { results, next, fetching } = resources || {};
 
     return (
       <Tiles
         fill
-        onMore={next && !fetching ? () => this.props.fetchResourcesMore({ activeType }) : null}
+        onMore={
+          next && !fetching
+            ? () => this.props.fetchResourcesMore()
+            : null
+        }
       >
         {
           results.map(
-            item => <SearchPane key={item.url} type={activeType} data={item} />,
+            item => <SearchPane key={item.url} type={'activeType'} data={item} />,
           )
         }
       </Tiles>
@@ -53,30 +55,33 @@ class Resources extends React.Component {
   }
 
   get placeholder() {
-    const { activeType, fetching } = this.props;
+    const { fetching } = this.props;
 
-    return fetching ?
-      <ListPlaceholder /> :
-      <Headline align="center">
-        {`Cannot find "${activeType}" collection. :(`}
-      </Headline>;
+    return fetching
+      ? <ListPlaceholder />
+      : (
+        <Headline align="center">
+          {'Cannot find "changeME!" collection. :('}
+        </Headline>
+      );
   }
 
   get meter() {
-    const { activeType, resources } = this.props;
+    const { resources } = this.props;
     const { results, count } = resources || {};
 
-    return count ? (
-      <Box align="center">
-        <Meter value={(results.length * 100) / count} />
-        <Value
-          value={results.length}
-          units={activeType}
-          align="center"
-        />
-      </Box>
-    ) :
-      null;
+    return count
+      ? (
+        <Box align="center">
+          <Meter value={(results.length * 100) / count} />
+          <Value
+            value={results.length}
+            // units={activeType}
+            align="center"
+          />
+        </Box>
+      )
+      : null;
   }
 
   render() {
@@ -101,7 +106,6 @@ class Resources extends React.Component {
 const mapStateToProps = ({
   resources,
   resources: {
-    activeType,
     fetching,
   },
 }, {
@@ -110,7 +114,6 @@ const mapStateToProps = ({
   },
 }) => ({
   fetching,
-  activeType,
   resources: resources[params.type],
 });
 

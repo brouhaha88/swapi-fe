@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
 import { renderRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import AppContainer from 'grommet/components/App';
 
-import {
-  fetchSearchTypes,
-} from '../../ducks/metadata';
+import { fetchSearchTypes } from '../../ducks/metadata';
+import { push } from '../../ducks/router';
 
 import SearchHeader from './components/SearchHeader';
 import SitemapFooter from './components/SitemapFooter';
