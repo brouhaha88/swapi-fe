@@ -89,7 +89,7 @@ class Resources extends React.Component {
     const { resources, route: { routes }, router: { location: { pathname } } } = this.props;
     const { count } = resources || {};
 
-    if (resources.error) {
+    if (resources && resources.error) {
       return <Redirect to={`/404?path=${pathname}`} />;
     }
 

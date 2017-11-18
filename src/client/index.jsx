@@ -6,6 +6,7 @@ import { Router } from 'react-router';
 import { renderRoutes } from 'react-router-config';
 
 import { routes, storeConfig } from '../config';
+import reducers from '../ducks';
 
 const history = storeConfig.getHistory();
 const store = storeConfig.getStore(history);
@@ -28,5 +29,9 @@ render();
 if (module.hot) {
   module.hot.accept('../config', () => {
     render();
+  });
+
+  module.hot.accept('../ducks', () => {
+    store.replaceReducer(reducers);
   });
 }
