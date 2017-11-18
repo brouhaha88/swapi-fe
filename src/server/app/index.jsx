@@ -18,15 +18,11 @@ router.get('*', (req, res) => {
   const requestUrl = new URL(`${req.protocol}://${req.hostname}${req.originalUrl}`);
   const components = matchRoutes(routes, requestUrl.pathname);
   const promises = [];
-  const history = storeConfig.getHistory();
-  const store = storeConfig.getStore(history, {
-    router: {
-      location: {
-        pathname: requestUrl.pathname,
-        search: requestUrl.search,
-      },
-    },
+  const history = storeConfig.getHistory({
+    initialEntries: [`${requestUrl.pathname}${requestUrl.search}`],
+    initialIndex: 0,
   });
+  const store = storeConfig.getStore(history);
 
   for (let i = 0, length = components.length; i < length; i += 1) {
     const { fetchData } = components[i].route.component;
@@ -38,7 +34,7 @@ router.get('*', (req, res) => {
     const application = renderToString(
       <AppContainer>
         <Provider store={store}>
-          <StaticRouter location={req.url} context={context} >
+          <StaticRouter location={requestUrl.pathname} context={context}>
             {renderRoutes(routes)}
           </StaticRouter>
         </Provider>

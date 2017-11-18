@@ -1,7 +1,17 @@
 import { CALL_HISTORY_METHOD, changeLocation } from '../ducks/router';
 
 const createRouterEnhancer = history => next => (reducer, preloadedState, enhancer) => {
-  const store = next(reducer, preloadedState, enhancer);
+  let state = preloadedState;
+
+  if (process.env.SERVER) {
+    const { location } = history;
+
+    if (location) {
+      state = Object.assign({}, { router: { location } });
+    }
+  }
+
+  const store = next(reducer, state, enhancer);
 
   history.listen((location) => {
     store.dispatch(changeLocation({ location }));

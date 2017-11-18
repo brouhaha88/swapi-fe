@@ -26,13 +26,13 @@ function getAndResetState() {
   return state;
 }
 
-function getHistory() {
+function getHistory(opts) {
   return process.env.SERVER
-    ? createMemoryHistory()
-    : createBrowserHistory();
+    ? createMemoryHistory(opts)
+    : createBrowserHistory(opts);
 }
 
-function getStore(history, serverState) {
+function getStore(history) {
   const {
     enhancer: routerEnhancer,
     middleware: routerMiddleware,
@@ -41,7 +41,7 @@ function getStore(history, serverState) {
   return createStore(
     reducers,
     process.env.SERVER
-      ? serverState
+      ? null
       : getAndResetState(),
     getComposer()(
       routerEnhancer,
