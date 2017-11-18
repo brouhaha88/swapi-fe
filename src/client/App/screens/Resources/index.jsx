@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router';
 import { renderRoutes } from 'react-router-config';
 
 import Section from 'grommet/components/Section';
@@ -85,8 +86,13 @@ class Resources extends React.Component {
   }
 
   render() {
-    const { resources, route: { routes } } = this.props;
+    const { resources, route: { routes }, router: { location: { pathname } } } = this.props;
     const { count } = resources || {};
+
+    if (resources.error) {
+      return <Redirect to={`/404?path=${pathname}`} />;
+    }
+
     return (
       <Section>
         <Box align="center">

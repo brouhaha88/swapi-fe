@@ -45,12 +45,17 @@ router.get('*', (req, res) => {
       </AppContainer>,
     );
     const head = Helmet.renderStatic();
+    const { url: redirectUrl } = context;
 
-    res.render('index', {
-      head,
-      application,
-      state: JSON.stringify(store.getState()),
-    });
+    if (redirectUrl) {
+      res.redirect(redirectUrl);
+    } else {
+      res.render('index', {
+        head,
+        application,
+        state: JSON.stringify(store.getState()),
+      });
+    }
   });
 });
 
