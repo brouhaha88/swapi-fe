@@ -1,9 +1,8 @@
-import React from 'react';
 import universal from 'react-universal-component';
 
 const initComponent = component => universal(() => component, {
-  loading: <span>Loading...</span>,
-  error: <span>Error...</span>,
+  loading: 'Loading...',
+  error: 'Error!!!',
 });
 
 export default [{
