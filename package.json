@@ -1,9 +1,9 @@
 {
-  "name": "webpack-universal-boilerplate",
+  "name": "swapi-fe",
   "version": "0.0.1",
   "private": true,
-  "description": "Minimal boilerplate to simplify kick off period of the next project.",
-  "main": "webpack.config.client.js",
+  "description": "Just a fun side-project for server-side rendering and code-splitting experiment using Star Wars API.",
+  "main": "webpack.config.server.js",
   "scripts": {
     "start": "rm -rf ./build && webpack --config webpack.config.server.js",
     "deploy": "now --public"
