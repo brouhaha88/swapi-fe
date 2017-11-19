@@ -56,7 +56,7 @@ router.get('*', (req, res) => {
         res.redirect(redirectUrl);
       } else {
         const chunkNames = flushChunkNames();
-        const { js, styles } = flushChunks(res.locals.webpackStats.toJson(), {
+        const { js, styles, cssHash } = flushChunks(res.locals.webpackStats.toJson(), {
           chunkNames,
           before: ['main'],
           after: [],
@@ -68,7 +68,8 @@ router.get('*', (req, res) => {
           application,
           scripts: js.toString(),
           styles: styles.toString(),
-          state: `<script>window.__STATE__ = ${JSON.stringify(store.getState())}</script>`,
+          cssHash: cssHash.toString(),
+          preloadedState: `<script type="text/javascript">window.__STATE__ = ${JSON.stringify(store.getState())}</script>`,
         });
       }
     });
