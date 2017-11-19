@@ -58,7 +58,7 @@ router.get('*', (req, res) => {
         const chunkNames = flushChunkNames();
         const { js, styles, cssHash } = flushChunks(res.locals.webpackStats.toJson(), {
           chunkNames,
-          before: ['main'],
+          before: ['client'],
           after: [],
         });
         const head = Helmet.renderStatic();
@@ -69,7 +69,7 @@ router.get('*', (req, res) => {
           scripts: js.toString(),
           styles: styles.toString(),
           cssHash: cssHash.toString(),
-          preloadedState: `<script type="text/javascript">window.__STATE__ = ${JSON.stringify(store.getState())}</script>`,
+          preloadedState: `<script type='text/javascript'>window.__STATE__ = ${JSON.stringify(store.getState())}</script>`,
         });
       }
     });

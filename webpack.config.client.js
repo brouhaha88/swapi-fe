@@ -4,13 +4,15 @@ const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
-  entry: [
-    'babel-polyfill',
-    'webpack-hot-middleware/client',
-    'react-hot-loader/patch',
-    './src/client',
-  ],
-  // stats: 'minimal',
+  entry: {
+    client: [
+      'babel-polyfill',
+      'webpack-hot-middleware/client',
+      'react-hot-loader/patch',
+      './src/client',
+    ],
+  },
+  stats: 'minimal',
   target: 'web',
   module: {
     rules: [{
@@ -48,11 +50,14 @@ module.exports = {
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.LimitChunkCountPlugin({
+      minChunks: Infinity,
+    }),
   ],
   output: {
     path: path.join(__dirname, './build'),
     publicPath: '/public/',
-    filename: '[name].js',
+    filename: 'client.js',
     chunkFilename: '[name].js',
   },
   resolve: {

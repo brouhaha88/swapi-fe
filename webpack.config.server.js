@@ -5,12 +5,14 @@ const StartServerPlugin = require('start-server-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
-  entry: [
-    'webpack/hot/poll?1000',
-    './src/server',
-  ],
+  entry: {
+    server: [
+      'webpack/hot/poll?1000',
+      './src/server',
+    ],
+  },
   watch: true,
-  // stats: 'minimal',
+  stats: 'minimal',
   target: 'node',
   node: {
     __dirname: false,

@@ -22,7 +22,6 @@ class App extends React.Component {
     return (
       <AppContainer centered={false}>
         <Helmet>
-          <meta charSet="utf-8" />
           <title>SWAPI - The Star Wars FE</title>
           <link rel="icon" href={favicon} />
         </Helmet>
