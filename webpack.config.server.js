@@ -2,7 +2,6 @@ const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 const StartServerPlugin = require('start-server-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -33,17 +32,14 @@ module.exports = {
       } */],
     }, {
       test: /\.(css|scss)$/,
-      use: ExtractTextPlugin.extract({
-        fallback: 'style-loader',
-        use: [{
-          loader: 'css-loader',
-        }, {
-          loader: 'postcss-loader',
-          options: {
-            includePaths: ['./node_modules'],
-          },
-        }],
-      }),
+      use: [{
+        loader: 'css-loader/locals',
+      }, {
+        loader: 'postcss-loader',
+        options: {
+          includePaths: ['./node_modules'],
+        },
+      }],
     }, {
       test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
       use: [{
@@ -55,7 +51,6 @@ module.exports = {
     }],
   },
   plugins: [
-    new ExtractTextPlugin('[name].css'),
     new StartServerPlugin({
       name: 'server.js',
       nodeArgs: ['--inspect'],

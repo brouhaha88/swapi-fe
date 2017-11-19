@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
+const ExtractCssChunks = require('extract-css-chunks-webpack-plugin');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -22,17 +23,16 @@ module.exports = {
       exclude: /node_modules/,
     }, {
       test: /\.(css|scss)$/,
-      use: [{
-        loader: 'style-loader',
-      }, {
-        loader: 'css-loader',
-      }, {
-        loader: 'postcss-loader',
-        options: {
-          includePaths: ['./node_modules'],
-        },
-      },
-      ],
+      use: ExtractCssChunks.extract({
+        use: [{
+          loader: 'css-loader',
+        }, {
+          loader: 'postcss-loader',
+          options: {
+            includePaths: ['./node_modules'],
+          },
+        }],
+      }),
     }, {
       test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
       use: [{
@@ -44,6 +44,7 @@ module.exports = {
     }],
   },
   plugins: [
+    new ExtractCssChunks(),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
