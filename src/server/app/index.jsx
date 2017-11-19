@@ -60,7 +60,7 @@ router.get('*', (req, res) => {
         application,
         scripts: js.toString(),
         styles: styles.toString(),
-        state: JSON.stringify(store.getState()),
+        state: `<script>window.__STATE__ = '${JSON.stringify(store.getState())}'</script>`,
       });
     }
   });
