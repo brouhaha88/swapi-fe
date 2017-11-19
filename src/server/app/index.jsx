@@ -3,6 +3,8 @@ import express from 'express';
 
 import React from 'react';
 import { renderToString } from 'react-dom/server';
+import { flushChunkNames } from 'react-universal-component/server';
+import flushChunks from 'webpack-flush-chunks';
 import { AppContainer } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import { renderRoutes, matchRoutes } from 'react-router-config';
@@ -40,6 +42,12 @@ router.get('*', (req, res) => {
         </Provider>
       </AppContainer>,
     );
+    const chunkNames = flushChunkNames().map(name => name.replace(/\//, '-'));
+    const { js, styles } = flushChunks(res.locals.webpackStats.toJson(), {
+      chunkNames,
+      before: ['main'],
+      after: [],
+    });
     const head = Helmet.renderStatic();
     const { url: redirectUrl } = context;
 
@@ -49,6 +57,8 @@ router.get('*', (req, res) => {
       res.render('index', {
         head,
         application,
+        scripts: js.toString(),
+        styles: styles.toString(),
         state: JSON.stringify(store.getState()),
       });
     }

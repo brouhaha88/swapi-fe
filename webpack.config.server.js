@@ -55,7 +55,7 @@ module.exports = {
     }],
   },
   plugins: [
-    new ExtractTextPlugin('[name].client.css'),
+    new ExtractTextPlugin('[name].css'),
     new StartServerPlugin({
       name: 'main.server.js',
       nodeArgs: ['--inspect'],
@@ -66,11 +66,14 @@ module.exports = {
     new webpack.DefinePlugin({
       'process.env.SERVER': 'true',
     }),
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1,
+    }),
   ],
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: '[name].server.js',
-    chunkFilename: '[name].server.js',
+    filename: 'server.js',
+    chunkFilename: 'server.js',
   },
   resolve: {
     extensions: ['.js', '.json', '.jsx'],

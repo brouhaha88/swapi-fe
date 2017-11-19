@@ -51,8 +51,8 @@ module.exports = {
   output: {
     path: path.join(__dirname, './build'),
     publicPath: '/public/',
-    filename: '[name].client.js',
-    chunkFilename: '[name].client.js',
+    filename: '[name].js',
+    chunkFilename: '[name].js',
   },
   resolve: {
     extensions: ['.js', '.json', '.jsx'],

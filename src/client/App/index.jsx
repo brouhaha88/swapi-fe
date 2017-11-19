@@ -9,7 +9,6 @@ import { fetchSearchTypes } from '../../ducks/metadata';
 import { push } from '../../ducks/router';
 
 import SearchHeader from './components/SearchHeader';
-import SitemapFooter from './components/SitemapFooter';
 
 import favicon from './assets/fav.ico';
 import './assets/index.scss';
@@ -36,7 +35,7 @@ class App extends React.Component {
           onUpdate={this.props.goToSearch}
         />
         {renderRoutes(this.props.route.routes)}
-        <UniversalComponent page="SitemapFooter" />
+        <UniversalComponent page="components/SitemapFooter" />
       </AppContainer>
     );
   }

@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>SWAPI - The Star Wars FE</title>
-    <link rel="stylesheet" type="text/css" href="/public/main.client.css" />
     <%- head.link.toString() %>
+    <%- styles %>
   </head>
   <body>
     <div id="root"><%- application %></div>
@@ -12,6 +12,6 @@
     <script>
       window.__STATE__ = '<%- state %>';
     </script>
-    <script src="/public/main.client.js"></script>
+    <%- scripts %>
   </body>
 </html>
