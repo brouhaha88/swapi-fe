@@ -19,7 +19,8 @@ router.get('*', (req, res) => {
   const context = {};
   const requestUrl = new URL(`${req.protocol}://${req.hostname}${req.originalUrl}`);
   const components = matchRoutes(routes, requestUrl.pathname);
-  const promises = [];
+  const preloading = [];
+  const fetching = [];
   const history = storeConfig.getHistory({
     initialEntries: [`${requestUrl.pathname}${requestUrl.search}`],
     initialIndex: 0,
@@ -27,42 +28,50 @@ router.get('*', (req, res) => {
   const store = storeConfig.getStore(history);
 
   for (let i = 0, length = components.length; i < length; i += 1) {
-    const { fetchData } = components[i].route.component;
+    const { preload } = components[i].route.component;
 
-    promises.push(fetchData instanceof Function ? fetchData(store) : Promise.resolve(null));
+    preloading.push(preload instanceof Function ? preload() : Promise.resolve(null));
   }
 
-  return Promise.all(promises).then(() => {
-    const application = renderToString(
-      <AppContainer>
-        <Provider store={store}>
-          <StaticRouter location={requestUrl.pathname} context={context}>
-            {renderRoutes(routes)}
-          </StaticRouter>
-        </Provider>
-      </AppContainer>,
-    );
-    const { url: redirectUrl } = context;
+  return Promise.all(preloading).then((preloaded) => {
+    for (let i = 0; i < preloaded.length; i += 1) {
+      const { fetchData } = preloaded[i];
 
-    if (redirectUrl) {
-      res.redirect(redirectUrl);
-    } else {
-      const chunkNames = flushChunkNames().map(name => name.replace(/\//, '-'));
-      const { js, styles } = flushChunks(res.locals.webpackStats.toJson(), {
-        chunkNames,
-        before: ['main'],
-        after: [],
-      });
-      const head = Helmet.renderStatic();
-
-      res.render('index', {
-        head,
-        application,
-        scripts: js.toString(),
-        styles: styles.toString(),
-        state: `<script>window.__STATE__ = ${JSON.stringify(store.getState())}</script>`,
-      });
+      fetching.push(fetchData instanceof Function ? fetchData(store) : Promise.resolve(null));
     }
+
+    return Promise.all(fetching).then(() => {
+      const application = renderToString(
+        <AppContainer>
+          <Provider store={store}>
+            <StaticRouter location={requestUrl.pathname} context={context}>
+              {renderRoutes(routes)}
+            </StaticRouter>
+          </Provider>
+        </AppContainer>,
+      );
+      const { url: redirectUrl } = context;
+
+      if (redirectUrl) {
+        res.redirect(redirectUrl);
+      } else {
+        const chunkNames = flushChunkNames();
+        const { js, styles } = flushChunks(res.locals.webpackStats.toJson(), {
+          chunkNames,
+          before: ['main'],
+          after: [],
+        });
+        const head = Helmet.renderStatic();
+
+        res.render('index', {
+          head,
+          application,
+          scripts: js.toString(),
+          styles: styles.toString(),
+          state: `<script>window.__STATE__ = ${JSON.stringify(store.getState())}</script>`,
+        });
+      }
+    });
   });
 });
 
