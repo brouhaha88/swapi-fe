@@ -57,7 +57,7 @@ module.exports = {
   plugins: [
     new ExtractTextPlugin('[name].css'),
     new StartServerPlugin({
-      name: 'main.server.js',
+      name: 'server.js',
       nodeArgs: ['--inspect'],
     }),
     new webpack.NamedModulesPlugin(),

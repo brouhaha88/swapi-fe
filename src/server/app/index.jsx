@@ -42,18 +42,19 @@ router.get('*', (req, res) => {
         </Provider>
       </AppContainer>,
     );
-    const chunkNames = flushChunkNames().map(name => name.replace(/\//, '-'));
-    const { js, styles } = flushChunks(res.locals.webpackStats.toJson(), {
-      chunkNames,
-      before: ['main'],
-      after: [],
-    });
-    const head = Helmet.renderStatic();
     const { url: redirectUrl } = context;
 
     if (redirectUrl) {
       res.redirect(redirectUrl);
     } else {
+      const chunkNames = flushChunkNames().map(name => name.replace(/\//, '-'));
+      const { js, styles } = flushChunks(res.locals.webpackStats.toJson(), {
+        chunkNames,
+        before: ['main'],
+        after: [],
+      });
+      const head = Helmet.renderStatic();
+
       res.render('index', {
         head,
         application,
