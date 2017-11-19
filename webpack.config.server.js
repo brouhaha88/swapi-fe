@@ -11,7 +11,7 @@ module.exports = {
     './src/server',
   ],
   watch: true,
-  stats: 'minimal',
+  // stats: 'minimal',
   target: 'node',
   node: {
     __dirname: false,
@@ -28,9 +28,9 @@ module.exports = {
       exclude: /node_modules/,
       use: [{
         loader: 'babel-loader',
-      }, {
+      }, /* {
         loader: 'eslint-loader',
-      }],
+      } */],
     }, {
       test: /\.(css|scss)$/,
       use: ExtractTextPlugin.extract({
@@ -55,9 +55,9 @@ module.exports = {
     }],
   },
   plugins: [
-    new ExtractTextPlugin('client.css'),
+    new ExtractTextPlugin('[name].client.css'),
     new StartServerPlugin({
-      name: 'server.js',
+      name: 'main.server.js',
       nodeArgs: ['--inspect'],
     }),
     new webpack.NamedModulesPlugin(),
@@ -69,7 +69,8 @@ module.exports = {
   ],
   output: {
     path: path.resolve(__dirname, 'build'),
-    filename: 'server.js',
+    filename: '[name].server.js',
+    chunkFilename: '[name].server.js',
   },
   resolve: {
     extensions: ['.js', '.json', '.jsx'],

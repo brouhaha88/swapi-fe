@@ -1,4 +1,5 @@
 import React from 'react';
+import universal from 'react-universal-component';
 import { connect } from 'react-redux';
 import { renderRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
@@ -12,6 +13,12 @@ import SitemapFooter from './components/SitemapFooter';
 
 import favicon from './assets/fav.ico';
 import './assets/index.scss';
+
+const UniversalComponent = universal(props => import(`./${props.page}`), {
+  minDelay: 1200,
+  loading: <span>Loading...</span>,
+  error: <span>Error...</span>,
+})
 
 class App extends React.Component {
   componentDidMount() {
@@ -29,7 +36,7 @@ class App extends React.Component {
           onUpdate={this.props.goToSearch}
         />
         {renderRoutes(this.props.route.routes)}
-        <SitemapFooter />
+        <UniversalComponent page="SitemapFooter" />
       </AppContainer>
     );
   }

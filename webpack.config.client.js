@@ -9,16 +9,16 @@ module.exports = {
     'react-hot-loader/patch',
     './src/client',
   ],
-  stats: 'minimal',
+  // stats: 'minimal',
   target: 'web',
   module: {
     rules: [{
       test: /\.(js|jsx)$/,
       use: [{
         loader: 'babel-loader',
-      }, {
+      }, /* {
         loader: 'eslint-loader',
-      }],
+      } */],
       exclude: /node_modules/,
     }, {
       test: /\.(css|scss)$/,
@@ -51,7 +51,8 @@ module.exports = {
   output: {
     path: path.join(__dirname, './build'),
     publicPath: '/public/',
-    filename: 'client.js',
+    filename: '[name].client.js',
+    chunkFilename: '[name].client.js',
   },
   resolve: {
     extensions: ['.js', '.json', '.jsx'],
