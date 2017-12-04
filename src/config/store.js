@@ -14,7 +14,7 @@ function getComposer() {
     : compose;
 }
 
-function getAndResetState() {
+function getPreloadedState() {
   let state = {};
 
   // eslint-disable-next-line no-underscore-dangle
@@ -42,7 +42,7 @@ function getStore(history) {
     reducers,
     process.env.SERVER
       ? null
-      : getAndResetState(),
+      : getPreloadedState(),
     getComposer()(
       routerEnhancer,
       applyMiddleware(
