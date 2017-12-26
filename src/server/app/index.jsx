@@ -35,9 +35,11 @@ router.get('*', (req, res) => {
 
   return Promise.all(preloading).then((preloaded) => {
     for (let i = 0; i < preloaded.length; i += 1) {
-      const { fetchData } = preloaded[i];
+      if (preloaded) {
+        const { fetchData } = preloaded[i];
 
-      fetching.push(fetchData instanceof Function ? fetchData(store) : Promise.resolve(null));
+        fetching.push(fetchData instanceof Function ? fetchData(store) : Promise.resolve(null));
+      }
     }
 
     return Promise.all(fetching).then(() => {
