@@ -12,7 +12,6 @@ module.exports = {
       './src/client',
     ],
   },
-  stats: 'minimal',
   target: 'web',
   module: {
     rules: [{
@@ -24,13 +23,14 @@ module.exports = {
       }],
       exclude: /node_modules/,
     }, {
-      test: /\.(css|scss)$/,
+      test: /\.sss$/,
       use: ExtractCssChunks.extract({
         use: [{
           loader: 'css-loader',
         }, {
           loader: 'postcss-loader',
           options: {
+            parser: 'sugarss',
             includePaths: ['./node_modules'],
           },
         }],
@@ -51,11 +51,11 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.LimitChunkCountPlugin({
-      minChunks: Infinity,
+      maxChunks: Infinity,
     }),
   ],
   output: {
-    path: path.join(__dirname, './build'),
+    path: path.join(__dirname, 'build'),
     publicPath: '/public/',
     filename: 'client.js',
     chunkFilename: '[name].js',

@@ -6,7 +6,7 @@ import Menu from 'grommet/components/Menu';
 import Search from 'grommet/components/Search';
 import Spinning from 'grommet/components/icons/Spinning';
 
-import './assets/index.scss';
+import './assets/index.sss';
 
 const DELAY = 333;
 
@@ -37,14 +37,14 @@ class SearchHeader extends React.Component {
   }
 
   getCurrentResourceType() {
-    const { searchTypes } = this.props.data;
+    const { resourceTypes } = this.props.data;
     const { type } = this.private;
 
-    return type || searchTypes[0] || '';
+    return type || resourceTypes[0] || '';
   }
 
   get menu() {
-    const { searchTypes, fetching, error } = this.props.data;
+    const { resourceTypes, fetching, error } = this.props.data;
 
     return (
       <Menu
@@ -71,7 +71,7 @@ class SearchHeader extends React.Component {
                 {error}
               </Heading>
             )
-            : searchTypes.map(
+            : resourceTypes.map(
               type => (
                 <Anchor
                   key={type}
@@ -127,7 +127,7 @@ class SearchHeader extends React.Component {
             uppercase
             strong
           >
-            SWAPI
+            {this.props.title}
           </Heading>
         </Anchor>
         <Search

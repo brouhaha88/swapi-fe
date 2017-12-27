@@ -1,9 +1,4 @@
 import 'isomorphic-fetch';
 
-import routes from './routes';
-import storeConfig from './store';
-
-export {
-  routes,
-  storeConfig,
-};
+export * from './store';
+export { default as routes } from './routes';

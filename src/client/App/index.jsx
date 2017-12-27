@@ -4,34 +4,39 @@ import { renderRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import AppContainer from 'grommet/components/App';
 
-import { fetchSearchTypes } from '../../ducks/metadata';
+import { fetchResourceTypes } from '../../ducks/metadata';
 import { push } from '../../ducks/router';
 
 import SearchHeader from './components/SearchHeader';
 import SitemapFooter from './components/SitemapFooter';
 
 import favicon from './assets/fav.ico';
-import './assets/index.scss';
+import './assets/index.sss';
 
 class App extends React.Component {
   componentDidMount() {
-    if (!this.props.metadata.searchTypes.length) this.props.fetchSearchTypes();
+    const { metadata, fetchResourceTypes: dispatchFetch } = this.props;
+
+    if (!metadata.resourceTypes.length) dispatchFetch();
   }
 
   render() {
+    const { metadata, metadata: { app: { title, description } }, navigate, route } = this.props;
+
     return (
       <AppContainer centered={false}>
         <Helmet>
-          <title>SWAPI - The Star Wars FE</title>
+          <title>{`${title} - ${description}`}</title>
           <link rel="icon" href={favicon} />
         </Helmet>
         <SearchHeader
-          data={this.props.metadata}
-          onUpdate={this.props.navigate}
+          title={title}
+          data={metadata}
+          onUpdate={navigate}
         />
-        {renderRoutes(this.props.route.routes)}
+        {renderRoutes(route.routes)}
         <SitemapFooter
-          data={this.props.metadata}
+          data={metadata}
         />
       </AppContainer>
     );
@@ -41,7 +46,7 @@ class App extends React.Component {
 const mapStateToProps = ({ metadata }) => ({ metadata });
 
 const mapDispatchToProps = dispatch => ({
-  fetchSearchTypes: payload => dispatch(fetchSearchTypes(payload)),
+  fetchResourceTypes: payload => dispatch(fetchResourceTypes(payload)),
   navigate: (payload) => {
     const { type, query } = payload;
     let searchPath = `/${type}`;
@@ -56,6 +61,6 @@ const mapDispatchToProps = dispatch => ({
 
 const ConnectedApp = connect(mapStateToProps, mapDispatchToProps)(App);
 
-ConnectedApp.fetchData = (store, payload) => store.dispatch(fetchSearchTypes(payload));
+ConnectedApp.fetchData = (store, payload) => store.dispatch(fetchResourceTypes(payload));
 
 export default ConnectedApp;

@@ -11,7 +11,7 @@ import { renderRoutes, matchRoutes } from 'react-router-config';
 import { StaticRouter } from 'react-router';
 import { Helmet } from 'react-helmet';
 
-import { routes, storeConfig } from '../../config';
+import { routes, getHistory, getStore } from '../../config';
 
 const router = express.Router();
 
@@ -21,11 +21,11 @@ router.get('*', (req, res) => {
   const components = matchRoutes(routes, requestUrl.pathname);
   const preloading = [];
   const fetching = [];
-  const history = storeConfig.getHistory({
+  const history = getHistory({
     initialEntries: [`${requestUrl.pathname}${requestUrl.search}`],
     initialIndex: 0,
   });
-  const store = storeConfig.getStore(history);
+  const store = getStore(history);
 
   for (let i = 0, length = components.length; i < length; i += 1) {
     const { preload } = components[i].route.component;

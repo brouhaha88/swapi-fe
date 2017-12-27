@@ -1,43 +1,49 @@
-const FETCH_SEARCH_TYPES_SUCCESS = 'swapi/metadata/FETCH_SEARCH_TYPES_SUCCESS';
-const fetchSearchTypesSuccess = payload => ({
+import { API_URL, APP_NAME, APP_DESCRIPTION } from '../config/constants';
+
+const FETCH_RESOURCE_TYPES_SUCCESS = 'swapi/metadata/FETCH_RESOURCE_TYPES_SUCCESS';
+const fetchResourceTypesSuccess = payload => ({
   payload: Object.assign({}, payload, { fetching: false }),
-  type: FETCH_SEARCH_TYPES_SUCCESS,
+  type: FETCH_RESOURCE_TYPES_SUCCESS,
 });
 
-const FETCH_SEARCH_TYPES_FAILED = 'swapi/metadata/FETCH_SEARCH_TYPES_FAILED';
-const fetchSearchTypesFailed = payload => ({
+const FETCH_RESOURCE_TYPES_FAILED = 'swapi/metadata/FETCH_RESOURCE_TYPES_FAILED';
+const fetchResourceTypesFailed = payload => ({
   payload: Object.assign({}, payload, { fetching: false }),
-  type: FETCH_SEARCH_TYPES_FAILED,
+  type: FETCH_RESOURCE_TYPES_FAILED,
 });
 
-const FETCH_SEARCH_TYPES_STARTED = 'swapi/metadata/FETCH_SEARCH_TYPES_STARTED';
-export const fetchSearchTypes = payload => (dispatch) => {
+const FETCH_RESOURCE_TYPES_STARTED = 'swapi/metadata/FETCH_RESOURCE_TYPES_STARTED';
+export const fetchResourceTypes = payload => (dispatch) => {
   dispatch({
     payload: Object.assign({}, payload, { fetching: true }),
-    type: FETCH_SEARCH_TYPES_STARTED,
+    type: FETCH_RESOURCE_TYPES_STARTED,
   });
 
-  return fetch('https://swapi.co/api/')
+  return fetch(API_URL)
     .then(res => res.json())
     .then((json) => {
-      const searchTypes = Object.keys(json);
+      const resourceTypes = Object.keys(json);
 
-      dispatch(fetchSearchTypesSuccess({ searchTypes }));
+      dispatch(fetchResourceTypesSuccess({ resourceTypes }));
     })
-    .catch(error => dispatch(fetchSearchTypesFailed({ error: error.message })));
+    .catch(error => dispatch(fetchResourceTypesFailed({ error: error.message })));
 };
 
 const initialState = {
+  app: {
+    title: APP_NAME,
+    description: APP_DESCRIPTION,
+  },
   fetching: false,
   error: '',
-  searchTypes: [],
+  resourceTypes: [],
 };
 
 export default (state = initialState, { type, payload }) => {
   switch (type) {
-    case FETCH_SEARCH_TYPES_STARTED:
-    case FETCH_SEARCH_TYPES_SUCCESS:
-    case FETCH_SEARCH_TYPES_FAILED:
+    case FETCH_RESOURCE_TYPES_STARTED:
+    case FETCH_RESOURCE_TYPES_SUCCESS:
+    case FETCH_RESOURCE_TYPES_FAILED:
       return Object.assign({}, state, payload);
     default:
       return state;

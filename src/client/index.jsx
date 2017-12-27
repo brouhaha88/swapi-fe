@@ -5,11 +5,11 @@ import { Provider } from 'react-redux';
 import { Router } from 'react-router';
 import { renderRoutes } from 'react-router-config';
 
-import { routes, storeConfig } from '../config';
+import { routes, getHistory, getStore } from '../config';
 import reducers from '../ducks';
 
-const history = storeConfig.getHistory();
-const store = storeConfig.getStore(history);
+const history = getHistory();
+const store = getStore(history);
 
 function render() {
   ReactDOM.hydrate(

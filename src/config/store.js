@@ -26,13 +26,13 @@ function getPreloadedState() {
   return state;
 }
 
-function getHistory(opts) {
+export function getHistory(opts) {
   return process.env.SERVER
     ? createMemoryHistory(opts)
     : createBrowserHistory(opts);
 }
 
-function getStore(history) {
+export function getStore(history) {
   const {
     enhancer: routerEnhancer,
     middleware: routerMiddleware,
@@ -52,8 +52,3 @@ function getStore(history) {
     ),
   );
 }
-
-export default {
-  getHistory,
-  getStore,
-};

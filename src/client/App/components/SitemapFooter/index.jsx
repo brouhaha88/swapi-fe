@@ -6,7 +6,7 @@ import Menu from 'grommet/components/Menu';
 import Paragraph from 'grommet/components/Paragraph';
 import Title from 'grommet/components/Title';
 
-import './assets/index.scss';
+import './assets/index.sss';
 
 class SitemapFooter extends React.Component {
   constructor(...args) {
@@ -47,12 +47,13 @@ class SitemapFooter extends React.Component {
               home
             </Anchor>
             {
-              this.props.data.searchTypes.map(type => (
+              this.props.data.resourceTypes.map(type => (
                 <Anchor
                   reverse
                   align="end"
                   path={{ path: `/${type}`, index: true }}
                   className="swapi-sitemap-anchor"
+                  key={Math.random().toString()}
                 >
                   {type}
                 </Anchor>

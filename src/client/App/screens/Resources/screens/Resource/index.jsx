@@ -15,4 +15,6 @@ class Resource extends React.Component {
 
 const mapStateToProps = ({ router }) => ({ router });
 
-export default connect(mapStateToProps, () => ({}))(Resource);
+const ConnectedResource = connect(mapStateToProps, () => ({}))(Resource);
+
+export default ConnectedResource;

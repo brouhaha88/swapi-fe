@@ -12,7 +12,6 @@ module.exports = {
     ],
   },
   watch: true,
-  stats: 'minimal',
   target: 'node',
   node: {
     __dirname: false,
@@ -33,12 +32,13 @@ module.exports = {
         loader: 'eslint-loader',
       }],
     }, {
-      test: /\.(css|scss)$/,
+      test: /\.sss$/,
       use: [{
         loader: 'css-loader/locals',
       }, {
         loader: 'postcss-loader',
         options: {
+          parser: 'sugarss',
           includePaths: ['./node_modules'],
         },
       }],

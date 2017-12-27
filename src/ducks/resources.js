@@ -1,5 +1,7 @@
 import qs from 'qs';
 
+import { API_URL } from '../config/constants';
+
 import { getRouterLocationPathname, getRouterLocationSearch } from './router';
 
 export const getResources = state => state.resources || {};
@@ -27,7 +29,7 @@ export const fetchResources = () => (dispatch, getState) => {
     type: FETCH_RESOURCES_STARTED,
   });
 
-  return fetch(`https://swapi.co/api/${activeType}/`)
+  return fetch(`${API_URL}${activeType}/`)
     .then(res => res.json())
     .then(json => dispatch(fetchResourcesSuccess({
       [activeType]: Object.assign({}, json, { error: '' }),
@@ -60,7 +62,7 @@ export const searchResources = payload => (dispatch, getState) => {
     type: SEARCH_RESOURCES_STARTED,
   });
 
-  return fetch(`https://swapi.co/api/${activeType}/?search=${query}`)
+  return fetch(`${API_URL}${activeType}/?search=${query}`)
     .then(res => res.json())
     .then(json => dispatch(searchResourcesSuccess({
       [activeType]: Object.assign({}, json, { error: '' }),
