@@ -27,10 +27,12 @@ class App extends React.Component {
         </Helmet>
         <SearchHeader
           data={this.props.metadata}
-          onUpdate={this.props.goToSearch}
+          onUpdate={this.props.navigate}
         />
         {renderRoutes(this.props.route.routes)}
-        <SitemapFooter />
+        <SitemapFooter
+          data={this.props.metadata}
+        />
       </AppContainer>
     );
   }
@@ -40,9 +42,13 @@ const mapStateToProps = ({ metadata }) => ({ metadata });
 
 const mapDispatchToProps = dispatch => ({
   fetchSearchTypes: payload => dispatch(fetchSearchTypes(payload)),
-  goToSearch: (payload) => {
+  navigate: (payload) => {
     const { type, query } = payload;
-    const searchPath = `/search?t=${type}&q=${query}`;
+    let searchPath = `/${type}`;
+
+    if (query) {
+      searchPath = `${searchPath}?q=${query}`;
+    }
 
     return dispatch(push(searchPath));
   },

@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -11,25 +13,34 @@ import Meter from 'grommet/components/Meter';
 import Value from 'grommet/components/Value';
 import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
 
-// !!!!!!!
-import SearchPane from '../Search/components/SearchPane';
+import ResourcePane from './components/ResourcePane';
 
-import { fetchResources, fetchResourcesMore } from '../../../../ducks/resources';
+import { fetchResources, searchResources, fetchResourcesMore } from '../../../../ducks/resources';
 
 class Resources extends React.Component {
   componentDidMount() {
-    const { resources } = this.props;
+    const { q: query } = qs.parse(this.props.router.location.search, { ignoreQueryPrefix: true });
 
-    if (!resources) {
+    if (query) {
+      this.props.searchResources();
+    } else {
       this.props.fetchResources();
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pathname } = this.props.router.location;
+    const { pathname, search } = this.props.router.location;
+    const { q: query } = qs.parse(this.props.router.location.search, { ignoreQueryPrefix: true });
 
-    if (nextProps.router.location.pathname !== pathname) {
-      nextProps.fetchResources();
+    if (
+      nextProps.router.location.pathname !== pathname ||
+      nextProps.router.location.search !== search
+    ) {
+      if (query) {
+        nextProps.searchResources();
+      } else {
+        nextProps.fetchResources();
+      }
     }
   }
 
@@ -48,7 +59,7 @@ class Resources extends React.Component {
       >
         {
           results.map(
-            item => <SearchPane key={item.url} type={activeType} data={item} />,
+            item => <ResourcePane key={item.url} type={activeType} data={item} />,
           )
         }
       </Tiles>
@@ -128,6 +139,7 @@ const mapStateToProps = ({
 
 const mapDispatchToProps = dispatch => ({
   fetchResources: payload => dispatch(fetchResources(payload)),
+  searchResources: payload => dispatch(searchResources(payload)),
   fetchResourcesMore: payload => dispatch(fetchResourcesMore(payload)),
 });
 

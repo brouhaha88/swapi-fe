@@ -14,9 +14,6 @@ export default [{
     exact: true,
     component: initComponent(import('../client/App/screens/Home')),
   }, {
-    path: '/search',
-    component: initComponent(import('../client/App/screens/Search')),
-  }, {
     path: '/404',
     component: initComponent(import('../client/common/screens/Error')),
   }, {

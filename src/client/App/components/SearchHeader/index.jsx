@@ -32,6 +32,8 @@ class SearchHeader extends React.Component {
     if (!type) return;
 
     this.private.type = type;
+
+    this.props.onUpdate({ type });
   }
 
   getCurrentResourceType() {
