@@ -42,51 +42,22 @@ class SitemapFooter extends React.Component {
               reverse
               align="end"
               path={{ path: '/', index: true }}
+              className="swapi-sitemap-anchor"
             >
-              Home
+              home
             </Anchor>
-            <Anchor
-              reverse
-              align="end"
-              path={{ path: '/films', index: true }}
-            >
-              Films
-            </Anchor>
-            <Anchor
-              reverse
-              align="end"
-              path={{ path: '/people', index: true }}
-            >
-              People
-            </Anchor>
-            <Anchor
-              reverse
-              align="end"
-              path={{ path: '/planets', index: true }}
-            >
-              Planets
-            </Anchor>
-            <Anchor
-              reverse
-              align="end"
-              path={{ path: '/species', index: true }}
-            >
-              Species
-            </Anchor>
-            <Anchor
-              reverse
-              align="end"
-              path={{ path: '/starships', index: true }}
-            >
-              Starships
-            </Anchor>
-            <Anchor
-              reverse
-              align="end"
-              path={{ path: '/vehicles', index: true }}
-            >
-              Vehicles
-            </Anchor>
+            {
+              this.props.data.searchTypes.map(type => (
+                <Anchor
+                  reverse
+                  align="end"
+                  path={{ path: `/${type}`, index: true }}
+                  className="swapi-sitemap-anchor"
+                >
+                  {type}
+                </Anchor>
+              ))
+            }
           </Menu>
         </Box>
       </Footer>
