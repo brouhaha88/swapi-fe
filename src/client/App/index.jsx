@@ -4,7 +4,7 @@ import { renderRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import AppContainer from 'grommet/components/App';
 
-import { fetchResourceTypes } from '../../ducks/metadata';
+import { fetchResourceTypes } from '../../ducks/metadata/resourceTypes';
 import { push } from '../../ducks/router';
 
 import SearchHeader from './components/SearchHeader';
@@ -17,20 +17,20 @@ class App extends React.Component {
   componentDidMount() {
     const { metadata, fetchResourceTypes: dispatchFetch } = this.props;
 
-    if (!metadata.resourceTypes.length) dispatchFetch();
+    if (!metadata.resourceTypes.keys.length) dispatchFetch();
   }
 
   render() {
-    const { metadata, metadata: { app: { title, description } }, navigate, route } = this.props;
+    const { metadata, metadata: { app: { name, description } }, navigate, route } = this.props;
 
     return (
       <AppContainer centered={false}>
         <Helmet>
-          <title>{`${title} - ${description}`}</title>
+          <title>{`${name} - ${description}`}</title>
           <link rel="icon" href={favicon} />
         </Helmet>
         <SearchHeader
-          title={title}
+          title={name}
           data={metadata}
           onUpdate={navigate}
         />

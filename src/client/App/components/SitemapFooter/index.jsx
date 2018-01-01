@@ -47,7 +47,7 @@ class SitemapFooter extends React.Component {
               home
             </Anchor>
             {
-              this.props.data.resourceTypes.map(type => (
+              this.props.data.resourceTypes.keys.map(type => (
                 <Anchor
                   reverse
                   align="end"

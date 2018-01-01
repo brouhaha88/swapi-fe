@@ -37,14 +37,14 @@ class SearchHeader extends React.Component {
   }
 
   getCurrentResourceType() {
-    const { resourceTypes } = this.props.data;
+    const { keys } = this.props.data.resourceTypes;
     const { type } = this.private;
 
-    return type || resourceTypes[0] || '';
+    return type || keys[0] || '';
   }
 
   get menu() {
-    const { resourceTypes, fetching, error } = this.props.data;
+    const { keys, fetching, error } = this.props.data.resourceTypes;
 
     return (
       <Menu
@@ -71,7 +71,7 @@ class SearchHeader extends React.Component {
                 {error}
               </Heading>
             )
-            : resourceTypes.map(
+            : keys.map(
               type => (
                 <Anchor
                   key={type}
@@ -127,7 +127,7 @@ class SearchHeader extends React.Component {
             uppercase
             strong
           >
-            {this.props.title}
+            {this.props.name}
           </Heading>
         </Anchor>
         <Search
