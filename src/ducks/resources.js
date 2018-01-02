@@ -1,17 +1,16 @@
 import qs from 'qs';
 
-import { API_URL } from '../config/constants';
-
 import { getRouterLocationPathname, getRouterLocationSearch } from './router';
+import { getAppApiUrl } from './metadata/app';
 
 export const getResources = state => state.resources || {};
 
 export const getResourcesByType = (state, type) => getResources(state)[type] || {};
 
-const FETCH_RESOURCES_SUCCESS = 'swapi/resources/FETCH_RESOURCES_SUCCESS';
-const fetchResourcesSuccess = (payload = {}) => ({
+const FETCH_RESOURCES_SUCCEEDED = 'swapi/resources/FETCH_RESOURCES_SUCCEEDED';
+const fetchResourcesSucceeded = (payload = {}) => ({
   payload: Object.assign({}, payload, { fetching: false }),
-  type: FETCH_RESOURCES_SUCCESS,
+  type: FETCH_RESOURCES_SUCCEEDED,
 });
 
 const FETCH_RESOURCES_FAILED = 'swapi/resources/FETCH_RESOURCES_FAILED';
@@ -21,17 +20,19 @@ const fetchResourcesFailed = (payload = {}) => ({
 });
 
 const FETCH_RESOURCES_STARTED = 'swapi/resources/FETCH_RESOURCES_STARTED';
-export const fetchResources = () => (dispatch, getState) => {
-  const activeType = getRouterLocationPathname(getState()).replace('/', '');
+// Technically it's not an action creator. made to split logic between fetching and searching.
+const fetchResources = (payload, dispatch, state) => {
+  const url = getAppApiUrl(state);
+  const activeType = getRouterLocationPathname(state).replace('/', '');
 
   dispatch({
     payload: { fetching: true },
     type: FETCH_RESOURCES_STARTED,
   });
 
-  return fetch(`${API_URL}${activeType}/`)
+  return fetch(`${url}${activeType}/`)
     .then(res => res.json())
-    .then(json => dispatch(fetchResourcesSuccess({
+    .then(json => dispatch(fetchResourcesSucceeded({
       [activeType]: Object.assign({}, json, { error: '' }),
     })))
     .catch(error => dispatch(fetchResourcesFailed({
@@ -39,10 +40,10 @@ export const fetchResources = () => (dispatch, getState) => {
     })));
 };
 
-const SEARCH_RESOURCES_SUCCESS = 'swapi/resources/SEARCH_RESOURCES_SUCCESS';
-const searchResourcesSuccess = payload => ({
+const SEARCH_RESOURCES_SUCCEEDED = 'swapi/resources/SEARCH_RESOURCES_SUCCEEDED';
+const searchResourcesSucceeded = payload => ({
   payload: Object.assign({}, payload, { fetching: false }),
-  type: SEARCH_RESOURCES_SUCCESS,
+  type: SEARCH_RESOURCES_SUCCEEDED,
 });
 
 const SEARCH_RESOURCES_FAILED = 'swapi/resources/SEARCH_RESOURCES_FAILED';
@@ -52,9 +53,11 @@ const searchResourcesFailed = payload => ({
 });
 
 const SEARCH_RESOURCES_STARTED = 'swapi/resources/SEARCH_RESOURCES_STARTED';
-export const searchResources = payload => (dispatch, getState) => {
-  const activeType = getRouterLocationPathname(getState()).replace('/', '');
-  const searchQuery = getRouterLocationSearch(getState());
+// Technically it's not an action creator. made to split logic between fetching and searching.
+const searchResources = (payload, dispatch, state) => {
+  const url = getAppApiUrl(state);
+  const activeType = getRouterLocationPathname(state).replace('/', '');
+  const searchQuery = getRouterLocationSearch(state);
   const { q: query } = qs.parse(searchQuery, { ignoreQueryPrefix: true });
 
   dispatch({
@@ -62,9 +65,9 @@ export const searchResources = payload => (dispatch, getState) => {
     type: SEARCH_RESOURCES_STARTED,
   });
 
-  return fetch(`${API_URL}${activeType}/?search=${query}`)
+  return fetch(`${url}${activeType}/?search=${query}`)
     .then(res => res.json())
-    .then(json => dispatch(searchResourcesSuccess({
+    .then(json => dispatch(searchResourcesSucceeded({
       [activeType]: Object.assign({}, json, { error: '' }),
     })))
     .catch(error => dispatch(searchResourcesFailed({
@@ -72,10 +75,21 @@ export const searchResources = payload => (dispatch, getState) => {
     })));
 };
 
-const FETCH_RESOURCES_MORE_SUCCESS = 'swapi/resources/FETCH_RESOURCES_MORE_SUCCESS';
-const fetchResourcesMoreSuccess = (payload = {}) => ({
+export const fetchOrSearchResources = payload => (dispatch, getState) => {
+  const searchQuery = getRouterLocationSearch(getState());
+  const { q: query } = qs.parse(searchQuery, { ignoreQueryPrefix: true });
+
+  if (query) {
+    return searchResources(payload, dispatch, getState());
+  }
+
+  return fetchResources(payload, dispatch, getState());
+};
+
+const FETCH_RESOURCES_MORE_SUCCEEDED = 'swapi/resources/FETCH_RESOURCES_MORE_SUCCEEDED';
+const fetchResourcesMoreSucceeded = (payload = {}) => ({
   payload: Object.assign({}, payload, { fetching: false }),
-  type: FETCH_RESOURCES_MORE_SUCCESS,
+  type: FETCH_RESOURCES_MORE_SUCCEEDED,
 });
 
 const FETCH_RESOURCES_MORE_FAILED = 'swapi/resources/FETCH_RESOURCES_MORE_FAILED';
@@ -93,7 +107,7 @@ export const fetchResourcesMore = () => (dispatch, getState) => {
 
   return fetch(resources.next)
     .then(res => res.json())
-    .then(json => dispatch(fetchResourcesMoreSuccess({
+    .then(json => dispatch(fetchResourcesMoreSucceeded({
       [activeType]: Object.assign({}, resources, json, {
         error: '',
         results: [...resources.results, ...json.results],
@@ -114,13 +128,13 @@ const initialState = {
 export default (state = initialState, { type, payload }) => {
   switch (type) {
     case FETCH_RESOURCES_STARTED:
-    case FETCH_RESOURCES_SUCCESS:
+    case FETCH_RESOURCES_SUCCEEDED:
     case FETCH_RESOURCES_FAILED:
     case SEARCH_RESOURCES_STARTED:
-    case SEARCH_RESOURCES_SUCCESS:
+    case SEARCH_RESOURCES_SUCCEEDED:
     case SEARCH_RESOURCES_FAILED:
     case FETCH_RESOURCES_MORE_STARTED:
-    case FETCH_RESOURCES_MORE_SUCCESS:
+    case FETCH_RESOURCES_MORE_SUCCEEDED:
     case FETCH_RESOURCES_MORE_FAILED:
       return Object.assign({}, state, payload);
     default:

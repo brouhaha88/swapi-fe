@@ -1,5 +1,3 @@
-import qs from 'qs';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
@@ -15,32 +13,22 @@ import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
 
 import ResourcePane from './components/ResourcePane';
 
-import { fetchResources, searchResources, fetchResourcesMore } from '../../../../ducks/resources';
+import { fetchResourceSchemas } from '../../../../ducks/metadata/resourceSchemas';
+import { fetchOrSearchResources, fetchResourcesMore } from '../../../../ducks/resources';
 
 class Resources extends React.Component {
   componentDidMount() {
-    const { q: query } = qs.parse(this.props.router.location.search, { ignoreQueryPrefix: true });
-
-    if (query) {
-      this.props.searchResources();
-    } else {
-      this.props.fetchResources();
-    }
+    this.props.fetchOrSearchResources().then(() => this.props.fetchResourceSchemas());
   }
 
   componentWillReceiveProps(nextProps) {
     const { pathname, search } = this.props.router.location;
-    const { q: query } = qs.parse(this.props.router.location.search, { ignoreQueryPrefix: true });
 
     if (
       nextProps.router.location.pathname !== pathname ||
       nextProps.router.location.search !== search
     ) {
-      if (query) {
-        nextProps.searchResources();
-      } else {
-        nextProps.fetchResources();
-      }
+      nextProps.fetchOrSearchResources();
     }
   }
 
@@ -138,13 +126,16 @@ const mapStateToProps = ({
 };
 
 const mapDispatchToProps = dispatch => ({
-  fetchResources: payload => dispatch(fetchResources(payload)),
-  searchResources: payload => dispatch(searchResources(payload)),
+  fetchOrSearchResources: payload => dispatch(fetchOrSearchResources(payload)),
   fetchResourcesMore: payload => dispatch(fetchResourcesMore(payload)),
+  fetchResourceSchemas: payload => dispatch(fetchResourceSchemas(payload)),
 });
 
 const ConnectedResources = connect(mapStateToProps, mapDispatchToProps)(Resources);
 
-ConnectedResources.fetchData = (store, payload) => store.dispatch(fetchResources(payload));
+ConnectedResources.fetchData = (store, payload) =>
+  store.dispatch(fetchOrSearchResources(payload)).then(() =>
+    store.dispatch(fetchResourceSchemas()),
+  );
 
 export default ConnectedResources;
