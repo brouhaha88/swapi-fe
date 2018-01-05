@@ -20,7 +20,7 @@ const fetchResourcesFailed = (payload = {}) => ({
 });
 
 const FETCH_RESOURCES_STARTED = 'swapi/resources/FETCH_RESOURCES_STARTED';
-// Technically it's not an action creator. made to split logic between fetching and searching.
+// Technically it's not an action creator. Made for splitting logic between fetching and searching.
 const fetchResources = (payload, dispatch, state) => {
   const url = getAppApiUrl(state);
   const activeType = getRouterLocationPathname(state).replace('/', '');
@@ -53,7 +53,7 @@ const searchResourcesFailed = payload => ({
 });
 
 const SEARCH_RESOURCES_STARTED = 'swapi/resources/SEARCH_RESOURCES_STARTED';
-// Technically it's not an action creator. made to split logic between fetching and searching.
+// Technically it's not an action creator. Made for splitting logic between fetching and searching.
 const searchResources = (payload, dispatch, state) => {
   const url = getAppApiUrl(state);
   const activeType = getRouterLocationPathname(state).replace('/', '');
