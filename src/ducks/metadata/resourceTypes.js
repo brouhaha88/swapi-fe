@@ -14,7 +14,8 @@ const fetchResourceTypesFailed = payload => ({
 
 const FETCH_RESOURCE_TYPES_STARTED = 'swapi/metadata_resourceTypes/FETCH_RESOURCE_TYPES_STARTED';
 export const fetchResourceTypes = payload => (dispatch, getState) => {
-  const url = getAppApiUrl(getState());
+  const state = getState();
+  const url = getAppApiUrl(state);
 
   dispatch({
     payload: Object.assign({}, payload, { fetching: true }),

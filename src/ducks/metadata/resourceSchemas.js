@@ -15,15 +15,16 @@ const fetchResourceSchemasFailed = payload => ({
 
 const FETCH_RESOURCE_SCHEMAS_STARTED = 'swapi/metadata_resourceSchemas/FETCH_RESOURCE_SCHEMAS_STARTED';
 export const fetchResourceSchemas = payload => (dispatch, getState) => {
-  const url = getAppApiUrl(getState());
-  const activeType = getRouterLocationPathname(getState()).replace('/', '');
+  const state = getState();
+  const url = getAppApiUrl(state);
+  const type = getRouterLocationPathname(state).replace('/', '');
 
   dispatch({
     payload: Object.assign({}, payload, { fetching: true }),
     type: FETCH_RESOURCE_SCHEMAS_STARTED,
   });
 
-  return fetch(`${url}${activeType}/schema`)
+  return fetch(`${url}${type}/schema`)
     .then(res => res.json())
     .then((json) => {
       const keys = Object.keys(json);
