@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router';
 import { renderRoutes } from 'react-router-config';
 
+import Columns from 'grommet/components/Columns';
 import Section from 'grommet/components/Section';
 import Box from 'grommet/components/Box';
 import Tiles from 'grommet/components/Tiles';
@@ -13,28 +14,54 @@ import ListPlaceholder from 'grommet-addons/components/ListPlaceholder';
 
 import ResourcePane from './components/ResourcePane';
 
+import {
+  push,
+  getRouterLocationPathname,
+  getRouterLocationSearch,
+  getTypeFromRouterLocationPathname,
+} from '../../../../ducks/router';
+import {
+  fetchOrSearchResources,
+  fetchResourcesMore,
+  getResourcesByType,
+  getFetchingFromResourcesByType,
+} from '../../../../ducks/resources';
 import { fetchResourceSchemas } from '../../../../ducks/metadata/resourceSchemas';
-import { fetchOrSearchResources, fetchResourcesMore } from '../../../../ducks/resources';
 
 class Resources extends React.Component {
   componentDidMount() {
-    this.props.fetchOrSearchResources().then(() => this.props.fetchResourceSchemas());
+    const {
+      resources,
+      fetchOrSearchResources: dispatchFetchFirst,
+      fetchResourceSchemas: dispatchFetchSecond,
+    } = this.props;
+
+    if (!resources.results || !resources.results.length) {
+      dispatchFetchFirst().then(() => dispatchFetchSecond());
+    }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { pathname, search } = this.props.router.location;
+    const {
+      activeType,
+      locationSearch,
+    } = this.props;
+    const {
+      fetchOrSearchResources: dispatchFetchFirst,
+      fetchResourceSchemas: dispatchFetchSecond,
+    } = nextProps;
 
     if (
-      nextProps.router.location.pathname !== pathname ||
-      nextProps.router.location.search !== search
+      nextProps.activeType !== activeType ||
+      nextProps.locationSearch !== locationSearch
     ) {
-      nextProps.fetchOrSearchResources();
+      dispatchFetchFirst().then(() => dispatchFetchSecond());
     }
   }
 
   get resourceTiles() {
-    const { resources, activeType } = this.props;
-    const { results, next, fetching } = resources || {};
+    const { resources, activeType, fetching, navigate } = this.props;
+    const { results, next } = resources;
 
     return (
       <Tiles
@@ -47,7 +74,14 @@ class Resources extends React.Component {
       >
         {
           results.map(
-            item => <ResourcePane key={item.url} type={activeType} data={item} />,
+            item => (
+              <ResourcePane
+                key={item.url}
+                type={activeType}
+                data={item}
+                onClick={navigate}
+              />
+            ),
           )
         }
       </Tiles>
@@ -55,7 +89,7 @@ class Resources extends React.Component {
   }
 
   get placeholder() {
-    const { fetching, activeType } = this.props;
+    const { activeType, fetching } = this.props;
 
     return fetching
       ? <ListPlaceholder />
@@ -68,7 +102,7 @@ class Resources extends React.Component {
 
   get meter() {
     const { resources, activeType } = this.props;
-    const { results, count } = resources || {};
+    const { results, count } = resources;
 
     return count
       ? (
@@ -85,43 +119,47 @@ class Resources extends React.Component {
   }
 
   render() {
-    const { resources, route: { routes }, router: { location: { pathname } } } = this.props;
-    const { count } = resources || {};
+    const { resources, route, locationPathname, fetching } = this.props;
+    const { routes } = route;
+    const { count } = resources;
 
     if (resources && resources.error) {
-      return <Redirect to={`/404?path=${pathname}`} />;
+      return <Redirect to={`/404?path=${locationPathname}`} />;
     }
 
     return (
       <Section>
-        <Box align="center">
-          {
-            count
-              ? this.resourceTiles
-              : this.placeholder
-          }
-        </Box>
-        {this.meter}
-        {renderRoutes(routes)}
+        <Columns>
+          <Box>
+            {
+              count
+                ? this.resourceTiles
+                : this.placeholder
+            }
+            {this.meter}
+          </Box>
+          <Box>
+            {
+              fetching
+                ? null
+                : renderRoutes(routes)
+            }
+          </Box>
+        </Columns>
       </Section>
     );
   }
 }
 
-const mapStateToProps = ({
-  router,
-  resources,
-  resources: {
-    fetching,
-  },
-}) => {
-  const activeType = router.location.pathname.replace('/', '');
+const mapStateToProps = (state) => {
+  const activeType = getTypeFromRouterLocationPathname(state);
 
   return {
-    router,
-    fetching,
     activeType,
-    resources: resources[activeType],
+    locationSearch: getRouterLocationSearch(state),
+    locationPathname: getRouterLocationPathname(state),
+    fetching: getFetchingFromResourcesByType(state, activeType),
+    resources: getResourcesByType(state, activeType),
   };
 };
 
@@ -129,6 +167,12 @@ const mapDispatchToProps = dispatch => ({
   fetchOrSearchResources: payload => dispatch(fetchOrSearchResources(payload)),
   fetchResourcesMore: payload => dispatch(fetchResourcesMore(payload)),
   fetchResourceSchemas: payload => dispatch(fetchResourceSchemas(payload)),
+  navigate: (payload) => {
+    const { id, type } = payload;
+    const path = `${type}/${btoa(id)}`;
+
+    return dispatch(push(path));
+  },
 });
 
 const ConnectedResources = connect(mapStateToProps, mapDispatchToProps)(Resources);

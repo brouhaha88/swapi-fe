@@ -1,17 +1,17 @@
 import { getMetadataAppApiUrl } from './app';
-import { getRouterLocationPathname } from '../router';
+import { getTypeFromRouterLocationPathname } from '../router';
 
 export const getMetadataResourceSchemas = state => state.metadata.resourceSchemas || {};
 
 const FETCH_RESOURCE_SCHEMAS_SUCCEEDED = 'swapi/metadata_resourceSchemas/FETCH_RESOURCE_SCHEMAS_SUCCEEDED';
 const fetchResourceSchemasSucceeded = payload => ({
-  payload: Object.assign({}, payload, { fetching: false }),
+  payload: Object.assign({}, payload),
   type: FETCH_RESOURCE_SCHEMAS_SUCCEEDED,
 });
 
 const FETCH_RESOURCE_SCHEMAS_FAILED = 'swapi/metadata_resourceSchemas/FETCH_RESOURCE_SCHEMAS_FAILED';
 const fetchResourceSchemasFailed = payload => ({
-  payload: Object.assign({}, payload, { fetching: false }),
+  payload: Object.assign({}, payload),
   type: FETCH_RESOURCE_SCHEMAS_FAILED,
 });
 
@@ -19,30 +19,38 @@ const FETCH_RESOURCE_SCHEMAS_STARTED = 'swapi/metadata_resourceSchemas/FETCH_RES
 export const fetchResourceSchemas = payload => (dispatch, getState) => {
   const state = getState();
   const url = getMetadataAppApiUrl(state);
-  const type = getRouterLocationPathname(state).replace('/', '');
+  const type = getTypeFromRouterLocationPathname(state);
 
   dispatch({
-    payload: Object.assign({}, payload, { fetching: true }),
+    payload: Object.assign({}, payload, {
+      [type]: {
+        fetching: true,
+      },
+    }),
     type: FETCH_RESOURCE_SCHEMAS_STARTED,
   });
 
   return fetch(`${url}${type}/schema`)
     .then(res => res.json())
     .then((json) => {
-      const keys = Object.keys(json);
-
-      dispatch(fetchResourceSchemasSucceeded(Object.assign({ keys }, json)));
+      dispatch(fetchResourceSchemasSucceeded({
+        [type]: Object.assign({}, json, {
+          error: '',
+          fetching: false,
+        }),
+      }));
     })
-    .catch(error => dispatch(fetchResourceSchemasFailed({ error: error.message })));
+    .catch(error => dispatch(fetchResourceSchemasFailed({
+      [type]: {
+        error: error.message,
+        fetching: false,
+      },
+    })));
 };
 
-const initialState = {
-  fetching: false,
-  error: '',
-  keys: [],
-};
+const initialState = {};
 
-export default (state = initialState, { type, payload }) => {
+export default (state = initialState, { type, payload = {} }) => {
   switch (type) {
     case FETCH_RESOURCE_SCHEMAS_STARTED:
     case FETCH_RESOURCE_SCHEMAS_SUCCEEDED:

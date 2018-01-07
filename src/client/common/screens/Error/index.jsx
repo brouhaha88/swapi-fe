@@ -11,7 +11,7 @@ class Error extends React.Component {
   render() {
     const {
       path: notFoundPath,
-    } = qs.parse(this.props.router.location.search, { ignoreQueryPrefix: true });
+    } = qs.parse(this.props.locationSearch, { ignoreQueryPrefix: true });
 
     return (
       <Section>
@@ -26,7 +26,7 @@ class Error extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  search: getRouterLocationSearch(state),
+  locationSearch: getRouterLocationSearch(state),
 });
 
 export default connect(mapStateToProps, () => ({}))(Error);

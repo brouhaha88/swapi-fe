@@ -4,6 +4,9 @@ import { renderRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import AppContainer from 'grommet/components/App';
 
+import SearchHeader from './components/SearchHeader';
+import SitemapFooter from './components/SitemapFooter';
+
 import { getMetadataAppName, getMetadataAppDescription } from '../../ducks/metadata/app';
 import {
   fetchResourceTypes,
@@ -12,9 +15,6 @@ import {
   getMetadataResourceTypesError,
 } from '../../ducks/metadata/resourceTypes';
 import { push } from '../../ducks/router';
-
-import SearchHeader from './components/SearchHeader';
-import SitemapFooter from './components/SitemapFooter';
 
 import favicon from './assets/fav.ico';
 import './assets/index.sss';

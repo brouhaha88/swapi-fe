@@ -6,13 +6,20 @@ import sw from './assets/sw.jpg';
 
 class ResourcePane extends React.Component {
   render() {
+    const { type, data } = this.props;
+    const { url: id, name } = data;
+
     return (
       <Tile>
         <Card
           thumbnail={sw}
-          heading={this.props.data.name}
-          label={this.props.type}
+          heading={name}
+          label={type}
           description="Sample description providing more details."
+          onClick={() => this.props.onClick({
+            id,
+            type,
+          })}
         />
       </Tile>
     );

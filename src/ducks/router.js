@@ -1,10 +1,19 @@
 export const getRouter = state => state.router || {};
 
-export const getRouterLocation = state => getRouter(state).location || {};
+export const getRouterLocation = state =>
+  getRouter(state).location || {};
 
-export const getRouterLocationPathname = state => getRouterLocation(state).pathname || '';
+export const getRouterLocationPathname = state =>
+  getRouterLocation(state).pathname || '';
 
-export const getRouterLocationSearch = state => getRouterLocation(state).search || '';
+export const getRouterLocationSearch = state =>
+  getRouterLocation(state).search || '';
+
+export const getTypeFromRouterLocationPathname = state =>
+  getRouterLocationPathname(state).replace('/', '').split('/')[0] || '';
+
+export const getIdFromRouterLocationPathname = state =>
+  getRouterLocationPathname(state).replace('/', '').split('/')[1] || '';
 
 const LOCATION_CHANGE = '@@router/LOCATION_CHANGE';
 export const changeLocation = payload => ({
