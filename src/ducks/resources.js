@@ -1,7 +1,7 @@
 import qs from 'qs';
 
 import { getRouterLocationPathname, getRouterLocationSearch } from './router';
-import { getAppApiUrl } from './metadata/app';
+import { getMetadataAppApiUrl } from './metadata/app';
 
 export const getResources = state => state.resources || {};
 
@@ -22,7 +22,7 @@ const fetchResourcesFailed = (payload = {}) => ({
 const FETCH_RESOURCES_STARTED = 'swapi/resources/FETCH_RESOURCES_STARTED';
 // Technically it's not an action creator. Made for splitting logic between fetching and searching.
 const fetchResources = (payload, dispatch, state) => {
-  const url = getAppApiUrl(state);
+  const url = getMetadataAppApiUrl(state);
   const type = getRouterLocationPathname(state).replace('/', '');
 
   dispatch({
@@ -55,7 +55,7 @@ const searchResourcesFailed = payload => ({
 const SEARCH_RESOURCES_STARTED = 'swapi/resources/SEARCH_RESOURCES_STARTED';
 // Technically it's not an action creator. Made for splitting logic between fetching and searching.
 const searchResources = (payload, dispatch, state) => {
-  const url = getAppApiUrl(state);
+  const url = getMetadataAppApiUrl(state);
   const type = getRouterLocationPathname(state).replace('/', '');
   const searchQuery = getRouterLocationSearch(state);
   const { q: query } = qs.parse(searchQuery, { ignoreQueryPrefix: true });

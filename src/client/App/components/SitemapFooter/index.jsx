@@ -16,13 +16,15 @@ class SitemapFooter extends React.Component {
   }
 
   render() {
+    const { appTypes, appName } = this.props;
+
     return (
       <Footer
         className="swapi-sitemap"
         justify="between"
       >
         <Title>
-          SWAPI
+          {appName}
         </Title>
         <Box
           direction="row"
@@ -47,7 +49,7 @@ class SitemapFooter extends React.Component {
               home
             </Anchor>
             {
-              this.props.data.resourceTypes.keys.map(type => (
+              appTypes.map(type => (
                 <Anchor
                   reverse
                   align="end"

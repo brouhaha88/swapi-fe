@@ -1,4 +1,16 @@
-import { getAppApiUrl } from './app';
+import { getMetadataAppApiUrl } from './app';
+
+export const getMetadataResourceTypes = state =>
+  state.metadata.resourceTypes || {};
+
+export const getMetadataResourceTypesKeys = state =>
+  getMetadataResourceTypes(state).keys || [];
+
+export const getMetadataResourceTypesFetching = state =>
+  getMetadataResourceTypes(state).fetching || false;
+
+export const getMetadataResourceTypesError = state =>
+  getMetadataResourceTypes(state).error || '';
 
 const FETCH_RESOURCE_TYPES_SUCCEEDED = 'swapi/metadata_resourceTypes/FETCH_RESOURCE_TYPES_SUCCEEDED';
 const fetchResourceTypesSucceeded = payload => ({
@@ -15,7 +27,7 @@ const fetchResourceTypesFailed = payload => ({
 const FETCH_RESOURCE_TYPES_STARTED = 'swapi/metadata_resourceTypes/FETCH_RESOURCE_TYPES_STARTED';
 export const fetchResourceTypes = payload => (dispatch, getState) => {
   const state = getState();
-  const url = getAppApiUrl(state);
+  const url = getMetadataAppApiUrl(state);
 
   dispatch({
     payload: Object.assign({}, payload, { fetching: true }),
@@ -27,7 +39,7 @@ export const fetchResourceTypes = payload => (dispatch, getState) => {
     .then((json) => {
       const keys = Object.keys(json);
 
-      dispatch(fetchResourceTypesSucceeded(Object.assign({ keys }, json)));
+      dispatch(fetchResourceTypesSucceeded(Object.assign({ keys, error: '' }, json)));
     })
     .catch(error => dispatch(fetchResourceTypesFailed({ error: error.message })));
 };
@@ -38,7 +50,7 @@ const initialState = {
   keys: [],
 };
 
-export default (state = initialState, { type, payload }) => {
+export default (state = initialState, { type, payload = {} }) => {
   switch (type) {
     case FETCH_RESOURCE_TYPES_STARTED:
     case FETCH_RESOURCE_TYPES_SUCCEEDED:

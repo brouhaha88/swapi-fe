@@ -1,5 +1,7 @@
-import { getAppApiUrl } from './app';
+import { getMetadataAppApiUrl } from './app';
 import { getRouterLocationPathname } from '../router';
+
+export const getMetadataResourceSchemas = state => state.metadata.resourceSchemas || {};
 
 const FETCH_RESOURCE_SCHEMAS_SUCCEEDED = 'swapi/metadata_resourceSchemas/FETCH_RESOURCE_SCHEMAS_SUCCEEDED';
 const fetchResourceSchemasSucceeded = payload => ({
@@ -16,7 +18,7 @@ const fetchResourceSchemasFailed = payload => ({
 const FETCH_RESOURCE_SCHEMAS_STARTED = 'swapi/metadata_resourceSchemas/FETCH_RESOURCE_SCHEMAS_STARTED';
 export const fetchResourceSchemas = payload => (dispatch, getState) => {
   const state = getState();
-  const url = getAppApiUrl(state);
+  const url = getMetadataAppApiUrl(state);
   const type = getRouterLocationPathname(state).replace('/', '');
 
   dispatch({

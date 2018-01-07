@@ -4,7 +4,13 @@ import { renderRoutes } from 'react-router-config';
 import { Helmet } from 'react-helmet';
 import AppContainer from 'grommet/components/App';
 
-import { fetchResourceTypes } from '../../ducks/metadata/resourceTypes';
+import { getMetadataAppName, getMetadataAppDescription } from '../../ducks/metadata/app';
+import {
+  fetchResourceTypes,
+  getMetadataResourceTypesKeys,
+  getMetadataResourceTypesFetching,
+  getMetadataResourceTypesError,
+} from '../../ducks/metadata/resourceTypes';
 import { push } from '../../ducks/router';
 
 import SearchHeader from './components/SearchHeader';
@@ -15,13 +21,21 @@ import './assets/index.sss';
 
 class App extends React.Component {
   componentDidMount() {
-    const { metadata, fetchResourceTypes: dispatchFetch } = this.props;
+    const { resourceTypesKeys, fetchResourceTypes: dispatchFetch } = this.props;
 
-    if (!metadata.resourceTypes.keys.length) dispatchFetch();
+    if (!resourceTypesKeys.length) dispatchFetch();
   }
 
   render() {
-    const { metadata, metadata: { app: { name, description } }, navigate, route } = this.props;
+    const {
+      name,
+      description,
+      resourceTypesKeys,
+      resourceTypesFetching,
+      resourceTypesError,
+      navigate,
+      route,
+    } = this.props;
 
     return (
       <AppContainer centered={false}>
@@ -30,20 +44,29 @@ class App extends React.Component {
           <link rel="icon" href={favicon} />
         </Helmet>
         <SearchHeader
-          title={name}
-          data={metadata}
+          appName={name}
+          appTypes={resourceTypesKeys}
+          fetching={resourceTypesFetching}
+          error={resourceTypesError}
           onUpdate={navigate}
         />
         {renderRoutes(route.routes)}
         <SitemapFooter
-          data={metadata}
+          appName={name}
+          appTypes={resourceTypesKeys}
         />
       </AppContainer>
     );
   }
 }
 
-const mapStateToProps = ({ metadata }) => ({ metadata });
+const mapStateToProps = state => ({
+  name: getMetadataAppName(state),
+  description: getMetadataAppDescription(state),
+  resourceTypesKeys: getMetadataResourceTypesKeys(state),
+  resourceTypesFetching: getMetadataResourceTypesFetching(state),
+  resourceTypesError: getMetadataResourceTypesError(state),
+});
 
 const mapDispatchToProps = dispatch => ({
   fetchResourceTypes: payload => dispatch(fetchResourceTypes(payload)),

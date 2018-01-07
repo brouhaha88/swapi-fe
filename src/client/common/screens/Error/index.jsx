@@ -5,6 +5,8 @@ import Box from 'grommet/components/Box';
 import Headline from 'grommet/components/Headline';
 import Section from 'grommet/components/Section';
 
+import { getRouterLocationSearch } from '../../../../ducks/router';
+
 class Error extends React.Component {
   render() {
     const {
@@ -23,6 +25,8 @@ class Error extends React.Component {
   }
 }
 
-const mapStateToProps = ({ router }) => ({ router });
+const mapStateToProps = state => ({
+  search: getRouterLocationSearch(state),
+});
 
 export default connect(mapStateToProps, () => ({}))(Error);
